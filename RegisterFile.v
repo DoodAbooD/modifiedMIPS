@@ -21,10 +21,12 @@ end
 
 //Writing at positive edge
 always @(posedge clk) begin
-	case ({regWrite,float})
-		2'b10: registers_i[writeReg] <= writeData;
-		2'b11: registers_f[writeReg] <= writeData;
-	endcase
+	if (~writeReg) begin //prevent writing on register zero
+		case ({regWrite,float})
+			2'b10: registers_i[writeReg] <= writeData;
+			2'b11: registers_f[writeReg] <= writeData;
+		endcase
+	end
 end
 
 //Reading at negative edge

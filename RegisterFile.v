@@ -13,7 +13,7 @@ reg [31:0] registers_f[31:0];
 //initializing registers with zeros
 int i;
 initial begin
-	for (i=0; i <= 31; i++) begin
+	for (i=0; i <= 31; i=i+1) begin
 		registers_i[i] <= 32'b0;
 		registers_f[i] <= 32'b0;	
 	end

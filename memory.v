@@ -2,7 +2,7 @@ module DataMemory ();
 
 
 
-you should use this initialization to build your data memory, this part is not complete
+//you should use this initialization to build your data memory, this part is not complete
 
 
 	

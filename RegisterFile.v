@@ -5,13 +5,13 @@ input [31:0] writeData;
 input regWrite, float; //control signals
 input clk;
 output [31:0] dataOut1, dataOut2;
-wire [31:0] dataOut1, dataOut2; 
+reg [31:0] dataOut1, dataOut2; 
 	
 reg [31:0] registers_i[31:0];	
 reg [31:0] registers_f[31:0];
 
 //initializing registers with zeros
-int i;
+reg i = 0;
 initial begin
 	for (i=0; i <= 31; i=i+1) begin
 		registers_i[i] <= 32'b0;

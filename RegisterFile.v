@@ -11,7 +11,7 @@ reg [31:0] registers_i[31:0];
 reg [31:0] registers_f[31:0];
 
 //initializing registers with zeros
-reg i = 0;
+integer i = 0;
 initial begin
 	for (i=0; i <= 31; i=i+1) begin
 		registers_i[i] <= 32'b0;

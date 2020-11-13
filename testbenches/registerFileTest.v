@@ -1,6 +1,3 @@
-`include "Clock.v"
-`include "RegisterFile.v"
-
 module registerFileTest;
     reg [5:0] _readReg1, _readReg2, _writeReg;
     reg [31:0] _writeData;

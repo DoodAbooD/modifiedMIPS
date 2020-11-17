@@ -1,6 +1,6 @@
 //declares a 32x32 register file.
 module registerFile(readReg1, readReg2, writeReg, writeData, regWrite, float, dataOut1, dataOut2, clk);
-input [5:0] readReg1, readReg2, writeReg;
+input [4:0] readReg1, readReg2, writeReg;
 input [31:0] writeData;
 input regWrite, float; //control signals
 input clk;
@@ -22,7 +22,7 @@ end
 //Writing at positive edge
 always @(posedge clk) begin
 	#1 //To make sure signals are stable
-	if (~writeReg) begin //prevent writing on register zero
+	if (writeReg != 5'b00000) begin //prevent writing on register zero
 		case ({regWrite,float})
 			2'b10: registers_i[writeReg] <= writeData;
 			2'b11: registers_f[writeReg] <= writeData;

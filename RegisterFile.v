@@ -21,6 +21,7 @@ end
 
 //Writing at positive edge
 always @(posedge clk) begin
+	#1 //To make sure signals are stable
 	if (~writeReg) begin //prevent writing on register zero
 		case ({regWrite,float})
 			2'b10: registers_i[writeReg] <= writeData;
@@ -31,6 +32,7 @@ end
 
 //Reading at negative edge
 always @(negedge clk) begin
+	#1 //To make sure signals are stable
 	if (float) begin
 		dataOut1 <= registers_f[readReg1];
 		dataOut2 <= registers_f[readReg2];

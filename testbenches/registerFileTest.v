@@ -25,6 +25,7 @@ module registerFileTest;
                 $display("cycle: %d" , cycle);
                 $display("readReg1: %d" , _dataOut1);
                 $display("readReg2: %d" , _dataOut2);
+					 $finish;
 
             end
             32'd1: begin
@@ -34,6 +35,7 @@ module registerFileTest;
                 $display("cycle: %d" , cycle);
                 $display("readReg1: %d" , _dataOut1);
                 $display("readReg2: %d" , _dataOut2);
+					 $finish;
             end
             32'd2: begin
             
@@ -45,7 +47,8 @@ module registerFileTest;
             
             end
         endcase
-
+		
         cycle = cycle + 1;
     end
+	 
 endmodule

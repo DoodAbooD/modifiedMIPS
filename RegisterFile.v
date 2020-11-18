@@ -19,28 +19,27 @@ initial begin
 	end
 end
 
-//Writing at positive edge
-always @(posedge clk) begin
-	#1 //To make sure signals are stable
-	if (writeReg != 5'b00000) begin //prevent writing on register zero
-		case ({regWrite,float})
-			2'b10: registers_i[writeReg] <= writeData;
-			2'b11: registers_f[writeReg] <= writeData;
-		endcase
+
+always @(*) begin
+	//Writing at positive clock
+	if (clk) begin
+		if (writeReg != 5'b00000) begin //prevent writing on register zero
+			case ({regWrite,float})
+				2'b10: registers_i[writeReg] = writeData;
+				2'b11: registers_f[writeReg] = writeData;
+			endcase
+		end
+	end
+
+	//Reading at negative clock
+	if (~clk) begin
+		if (float) begin
+			dataOut1 = registers_f[readReg1];
+			dataOut2 = registers_f[readReg2];
+		end else begin
+			dataOut1 = registers_i[readReg1];
+			dataOut2 = registers_i[readReg2];
+		end
 	end
 end
-
-//Reading at negative edge
-always @(negedge clk) begin
-	#1 //To make sure signals are stable
-	if (float) begin
-		dataOut1 <= registers_f[readReg1];
-		dataOut2 <= registers_f[readReg2];
-	end else begin
-		dataOut1 <= registers_i[readReg1];
-		dataOut2 <= registers_i[readReg2];
-	end
-end
-
-
 endmodule

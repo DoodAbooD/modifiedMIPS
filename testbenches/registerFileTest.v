@@ -12,10 +12,8 @@ module registerFileTest;
     //module registerFile(readReg1, readReg2, writeReg, writeData, regWrite, float, dataOut1, dataOut2, clk);
     registerFile regFile(_readReg1, _readReg2, _writeReg, _writeData, _regWrite, _float, _dataOut1, _dataOut2, _clk);
     always@(posedge _clk) begin
-			$display("cycle: %d" , cycle);
         case (cycle)
             0: begin
-
 
             end
             1: begin
@@ -107,8 +105,7 @@ module registerFileTest;
             $stop;
             end
         endcase
-		
-        cycle = cycle + 1;
+		cycle = cycle + 1;    
     end
 	 
 endmodule

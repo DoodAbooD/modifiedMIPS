@@ -3,7 +3,7 @@ module IFID(clk, pcp4, ins, pcp4o, op, rs_fmt, rt_ft, rd_fs, sh_fd, fun, im, ad)
     input [31:0] pcp4;
     input [31:0] ins;
     output [31:0] pcp4o;
-    output [4:0] op;
+    output [5:0] op;
     output [4:0] rs_fmt;
     output [4:0] rt_ft;
     output [4:0] rd_fs;
@@ -32,6 +32,7 @@ module IFID(clk, pcp4, ins, pcp4o, op, rs_fmt, rt_ft, rd_fs, sh_fd, fun, im, ad)
     end
 
     always @(posedge clk) begin
+			
         internal_pcp4 <= pcp4;
         internal_ins <= ins;
     end

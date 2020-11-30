@@ -9,9 +9,9 @@ module PC (in, out, w);
     initial 
         out = 0;
 
-    
 	 always @(*) begin
 		if (w) out = in;
 	 end
+	 
 	
 endmodule

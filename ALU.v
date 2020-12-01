@@ -67,8 +67,32 @@ module ALU(in1,in2,out1,out2,o,z,control);
             // Signed Addition
             4'b1010: begin
                 out1 = in1 + in2;
-                if ( (in1[31] == in2[31]) && (in1[31] != out1[31]) ) o = 1; // same sign inputs, and result sign changed --> overflow
+                if ( (in1[31] == in2[31]) && (in1[31] != out1[31]) ) o = 1; // same sign inputs, and result sign changed --> overflow occured
             end
+
+            // Signed Subtraction
+            4'b1011: begin
+                out1 = in2 - in1;
+                if ( (in1[31] != in2[31]) && (in2[31] != out1[31]) ) o = 1; // different sign inputs, and result sign changed from first operand (in2) --> overflow occured
+            end
+
+            //1100 Unsigned Multiply 
+            4'b1100: {out2,out1} = in1 * in2;
+
+            //1101 Unsigned Divide     
+            4'b1101: begin
+                if (in2 !=0) begin
+                    out1 = in1 / in2;
+                    out2 = in1 % in2;
+                end
+                else begin
+                    out1 = 0;
+                    out2 = 0;
+                    o = 1;  // here overflow and zero flag will both be set, indicating a division by zero error
+                end
+                
+            end
+            
             //TODO rest of instructions
 			
 				default: ;

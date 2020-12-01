@@ -2,15 +2,15 @@ module IDEX(clk,
 iRWrite, iFloat, 
 iWBsrc, iMWrite
 iHiLoWrite,  iHL,
-iALUs, iALUc,
-iRegOut1, iRegOut2, 
+iALUs, iALUop,
+iRegOut1, iFun, iRegOut2, 
 iDstReg,
 
 oRWrite, oFloat, 
 oWBsrc, oMWrite
 oHiLoWrite, oHL, 
-oALUs, oALUc,
-oRegOut1, oRegOut2, 
+oALUs, oALUop,
+oRegOut1, oFun, oRegOut2, 
 oDstReg,
 );
     input clk;
@@ -20,8 +20,9 @@ oDstReg,
     input iMWrite;
     input iHiLoWrite, iHL;
     input [1:0] iALUs;
-    input [3:0] iALUc;
+    input [1:0] iALUop;
     input [31:0] iRegOut1, iRegOut2;
+    input [5:0] iFun;
     input [4:0] iDstReg;
 
     output oRWrite,oFloat;
@@ -29,8 +30,9 @@ oDstReg,
     output oMWrite;
     output oHiLoWrite, oHL;
     output [1:0] oALUs;
-    output [3:0] oALUc;
+    output [1:0] oALUop;
     output [31:0] oRegOut1, oRegOut2;
+    output [5:0] oFun;
     output [4:0] oDstReg;
 
     reg internal_RWrite,internal_Float;
@@ -38,8 +40,9 @@ oDstReg,
     reg internal_MWrite;
     reg internal_HiLoWrite, internal_HL;
     reg [1:0] internal_ALUs;
-    reg [3:0] internal_ALUc;
+    reg [1:0] internal_ALUop;
     reg [31:0] internal_RegOut1, internal_RegOut2;
+    reg [5:0] internal_Fun;
     reg [4:0] internal_DstReg;
     
     assign oRWrite = internal_RWrite;
@@ -49,9 +52,10 @@ oDstReg,
     assign oHiLoWrite = internal_HiLoWrite;
     assign oHL = internal_HL;
     assign oALUs = internal_ALUs;
-    assign oALUc = internal_ALUc;
+    assign oALUop = internal_ALUop;
     assign oRegOut1 = internal_RegOut1;
     assign oRegOut2 = internal_RegOut2;
+    assign oFun = internal_Fun;
     assign oDstReg = internal_DstReg;
 
 
@@ -63,9 +67,10 @@ oDstReg,
         internal_HiLoWrite = 0;
         internal_HL = 0;
         internal_ALUs = 0;
-        internal_ALUc = 0;
+        internal_ALUop = 0;
         internal_RegOut1 = 0;
         internal_RegOut2 = 0;
+        internal_Fun = 0;
         internal_DstReg = 0;  
     end
 
@@ -77,9 +82,10 @@ oDstReg,
         internal_HiLoWrite <= iHiLoWrite;
         internal_HL <= iHL;
         internal_ALUs <= iALUs;
-        internal_ALUc <= iALUc;
+        internal_ALUop <= iALUop;
         internal_RegOut1 <= iRegOut1;
         internal_RegOut2 <= iRegOut2;
+        internal_Fun <= iFun;
         internal_DstReg <= iDstReg;
     end
 

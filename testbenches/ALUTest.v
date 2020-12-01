@@ -53,48 +53,95 @@ module ALUTest;
 		
         end
         2: begin //0010 Unsigned Addition with overflow
-            control = 4'b0010;
+                control = 4'b0010;
 				in1 = 32'h80000055; // (1000 0000 0000 0000 0000 0000 0101 0101)
 				in2 = 32'h80000001; // (1000 0000 0000 0000 0000 0000 0000 0001)
 				$strobe("result = : %h" , out, " The correct value is 00000056 | overflow should occur! z = %b and o = %b", z,o); 
 				
         end
         3: begin //0011 Unsigned Subtraction with overflow
-            control = 4'b0011;
+                control = 4'b0011;
 				in1 = 32'h00000055; // (0000 0000 0000 0000 0000 0000 0101 0101)
 				in2 = 32'h00000001; // (0000 0000 0000 0000 0000 0000 0000 0001)
 				$strobe("result = : %h" , out, " The correct value is FFFFFFAC | overflow should occur! z = %b and o = %b", z,o); 
         end
-        4: begin //0011 Unsigned Subtraction with zero
-            control = 4'b0011;
+        4: begin //0011 Unsigned Subtraction with result equal to zero
+                control = 4'b0011;
 				in1 = 32'hF0FF0055; // (1111 0000 1111 1111 0000 0000 0101 0101)
 				in2 = 32'hF0FF0055; // (1111 0000 1111 1111 0000 0000 0101 0101)
 				$strobe("result = : %h" , out, " The correct value is 00000000 | zero should occur! z = %b and o = %b", z,o); 
         end
-        5: begin
+        5: begin //0100 Set Less Than , both negative and rs is less
+                control = 4'b0100;
+				in1 = 32'hFFFFFFF4; // (1111 1111 1111 1111 1111 1111 1111 0100) (-12)
+				in2 = 32'hFFFFFFF5; // (1111 1111 1111 1111 1111 1111 1111 0101) (-11)
+				$strobe("result = : %h" , out, " The correct value is 00000001 |  z = %b and o = %b", z,o);
             
         end
-        6: begin
+        6: begin //0100 Set Less Than , both positive and rs is larger
+                control = 4'b0100;
+				in1 = 32'h0FFFFFF5; // (0000 1111 1111 1111 1111 1111 1111 0101) 
+				in2 = 32'h0FFFFFF4; // (0000 1111 1111 1111 1111 1111 1111 0100) 
+				$strobe("result = : %h" , out, " The correct value is 00000000 |  z = %b and o = %b", z,o);
+        end
+        7: begin //0100 Set Less Than , rs negative and rt positive
+                control = 4'b0100;
+				in1 = 32'h8FFFFFF5; // (1000 1111 1111 1111 1111 1111 1111 0101) 
+				in2 = 32'h0FFFFFF4; // (0000 1111 1111 1111 1111 1111 1111 0100) 
+				$strobe("result = : %h" , out, " The correct value is 00000001 |  z = %b and o = %b", z,o);
+        
+        end
+        8: begin //0100 Set Less Than , rs positive and rt negative
+                control = 4'b0100;
+				in1 = 32'h0FFFFFF5; // (0000 1111 1111 1111 1111 1111 1111 0101) 
+				in2 = 32'h8FFFFFF4; // (1000 1111 1111 1111 1111 1111 1111 0100) 
+				$strobe("result = : %h" , out, " The correct value is 00000000 |  z = %b and o = %b", z,o);
+        end
+        9: begin //0101 Set Less Than Unsigned, rs less
+                control = 4'b0101;
+				in1 = 32'h7FFFFFF5; // (0111 1111 1111 1111 1111 1111 1111 0101) 
+				in2 = 32'hFFFFFFF5; // (1111 1111 1111 1111 1111 1111 1111 0101) 
+				$strobe("result = : %h" , out, " The correct value is 00000001 |  z = %b and o = %b", z,o);
+         
+        end
+        10: begin //0111 NOR
+                control = 4'b0111;
+				in1 = 32'h9FF0FFF5; // (1001 1111 1111 0000 1111 1111 1111 0101) 
+				in2 = 32'h9FFF0FF5; // (1001 1111 1111 1111 0000 1111 1111 0101) 
+				$strobe("result = : %h" , out, " The correct value is 6000000A |  z = %b and o = %b", z,o);
+        end
+        11: begin //1010 Signed Addition positive value
+                control = 4'b1010;
+				in1 = 32'hFFFFFFF5; // (1111 1111 1111 1111 1111 1111 1111 0101) (-11) 
+				in2 = 32'h0000F000; // (0000 0000 0000 0000 1111 0000 0000 0000) (61440) 
+				$strobe("result = : %h" , out, " The correct value is 0000EFF5 |  z = %b and o = %b", z,o);
+        end
+        12: begin //1010 Signed Addition negative value
+                control = 4'b1010;
+				in1 = 32'hFFFFFFF5; // (0000 0000 0000 0000 0000 0000 0000 1011) (11) 
+				in2 = 32'hFFFF1000; // (1111 1111 1111 1111 0001 0000 0000 0000) (-61440) 
+				$strobe("result = : %h" , out, " The correct value is FFFF100B |  z = %b and o = %b", z,o);
             
         end
-        7: begin
-            
+
+        13: begin //1010 Signed Addition with overflow
+                control = 4'b1010;
+				in1 = 32'h7FFFFFFF; // (0111 1111 1111 1111 1111 1111 1111 1111)  
+				in2 = 32'h00000001; // (0000 0000 0000 0000 0000 0000 0000 0001) 
+				$strobe("result = : %h" , out, " The correct value is 80000000 | overflow should occur!  z = %b and o = %b", z,o);
+
         end
-        8: begin
-            
+        14: begin //1010 Signed Addition with zero result
+                control = 4'b1010;
+				in1 = 32'hFFFFFFFA; // (1111 1111 1111 1111 1111 1111 1111 1010)  (-6)
+				in2 = 32'h00000006; // (0000 0000 0000 0000 0000 0000 0000 0110)  (+6)
+				$strobe("result = : %h" , out, " The correct value is 00000000 | zero should occur!  z = %b and o = %b", z,o);
         end
-        9: begin
-            
+
+        15: begin
         end
-        10: begin
-            
-        end
-        11: begin
-            
-        end
-        12: begin
-            
-        end
+
+
         default:   $stop; 
 
 

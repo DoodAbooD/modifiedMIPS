@@ -82,7 +82,7 @@ module ALUTest;
                 control = 4'b0100;
 				in1 = 32'h0FFFFFF5; // (0000 1111 1111 1111 1111 1111 1111 0101) 
 				in2 = 32'h0FFFFFF4; // (0000 1111 1111 1111 1111 1111 1111 0100) 
-				$strobe("result = : %h" , out, " The correct value is 00000000 |  z = %b and o = %b", z,o);
+				$strobe("result = : %h" , out, " The correct value is 00000000 | zero should occur! z = %b and o = %b", z,o);
         end
         7: begin //0100 Set Less Than , rs negative and rt positive
                 control = 4'b0100;
@@ -95,7 +95,7 @@ module ALUTest;
                 control = 4'b0100;
 				in1 = 32'h0FFFFFF5; // (0000 1111 1111 1111 1111 1111 1111 0101) 
 				in2 = 32'h8FFFFFF4; // (1000 1111 1111 1111 1111 1111 1111 0100) 
-				$strobe("result = : %h" , out, " The correct value is 00000000 |  z = %b and o = %b", z,o);
+				$strobe("result = : %h" , out, " The correct value is 00000000 | zero should occur! z = %b and o = %b", z,o);
         end
         9: begin //0101 Set Less Than Unsigned, rs less
                 control = 4'b0101;
@@ -118,7 +118,7 @@ module ALUTest;
         end
         12: begin //1010 Signed Addition negative value
                 control = 4'b1010;
-				in1 = 32'hFFFFFFF5; // (0000 0000 0000 0000 0000 0000 0000 1011) (11) 
+				in1 = 32'h0000000B; // (0000 0000 0000 0000 0000 0000 0000 1011) (11) 
 				in2 = 32'hFFFF1000; // (1111 1111 1111 1111 0001 0000 0000 0000) (-61440) 
 				$strobe("result = : %h" , out, " The correct value is FFFF100B |  z = %b and o = %b", z,o);
             

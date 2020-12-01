@@ -46,7 +46,7 @@ module ALU(in1,in2,out1,out2,o,z,control);
             // Unsigned Sub with overflow calculation
             4'b0011: begin  
                 o = 1'b1;
-                {o,out1} = {o,in2} - {0,in1}; // place a 1 at the MSB of in2, see if its used when subtracting
+                {o,out1} = {o,in2} - {1'b0,in1}; // place a 1 at the MSB of in2, see if its used when subtracting
                 o = ~o;  // if it was used (it became 0), an overflow occured.
             end 
 
@@ -62,7 +62,7 @@ module ALU(in1,in2,out1,out2,o,z,control);
             4'b0101: out1 = (in1 < in2)? 1 : 0;  
             
             // NOR
-            4'b0111: out1 = in1 ~| in2; 
+            4'b0111: out1 = ~(in1 | in2); 
 
             // Signed Addition
             4'b1010: begin
@@ -70,7 +70,9 @@ module ALU(in1,in2,out1,out2,o,z,control);
                 if ( (in1[31] == in2[31]) && (in1[31] != out1[31]) ) o = 1; // same sign inputs, and result sign changed --> overflow
             end
             //TODO rest of instructions
-        endcase
+			
+				default: ;
+		  endcase
 
     //zero flag setting/resetting
     z = ((out1 == 0)&&(out2 == 0))? 1 : 0; 

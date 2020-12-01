@@ -138,6 +138,8 @@ module ALUTest;
 				$strobe("result = : %h" , out, " The correct value is 00000000 | zero should occur!  z = %b and o = %b", z,o);
         end
 
+        //TODO: Add more tests 
+        
         15: begin
         end
 

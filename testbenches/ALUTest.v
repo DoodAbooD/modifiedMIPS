@@ -139,6 +139,11 @@ module ALUTest;
         end
 
         //TODO: Add more tests 
+		//1011 Signed Subtraction
+		//1100 Unsigned Multiply 
+		//1101 Unsigned Divide 
+		//1110 Signed Multiply 
+		//1111 Signed Divide 
         
         15: begin
         end

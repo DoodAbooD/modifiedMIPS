@@ -6,8 +6,8 @@
 0100 Set Less Than
 0101 Set Less Than Unsigned
 0111 NOR
-1000
-1001
+1000 Shift Left
+1001 Shift Right
 1010 Signed Addition
 1011 Signed Subtraction
 1100 Unsigned Multiply 
@@ -152,16 +152,9 @@ module ALU(in1,in2,out1,out2,o,z,control);
                         out2 = in1 % helper2;
                         out1 = (~out1) + 1; // convert quotient to negative
                     end                
-                
-                end
+                //TODO: shift instructions
 
             end
-
-
-
-
-            
-            //TODO rest of instructions
 			
 				default: ;
 		  endcase

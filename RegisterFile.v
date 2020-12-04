@@ -1,11 +1,11 @@
 //declares a 32x32 register file.
-module registerFile(readReg1, readReg2, writeReg, writeData, regWrite, float, dataOut1, dataOut2, clk);
-	input [4:0] readReg1, readReg2, writeReg;
+module registerFile(readReg1, readReg2, readReg3, writeReg, writeData, regWrite, dataOut1, dataOut2, dataOut3, clk);
+	input [4:0] readReg1, readReg2, readReg3, writeReg;
 	input [31:0] writeData;
-	input regWrite, float; //control signals
+	input regWrite; //control signals
 	input clk;
-	output [31:0] dataOut1, dataOut2;
-	reg [31:0] dataOut1, dataOut2; 
+	output [31:0] dataOut1, dataOut2, dataOut3;
+	reg [31:0] dataOut1, dataOut2, dataOut3;
 		
 	reg [31:0] registers_i[31:0];	
 
@@ -20,16 +20,15 @@ module registerFile(readReg1, readReg2, writeReg, writeData, regWrite, float, da
 	always @(*) begin
 		//Writing at positive clock
 		if (clk) begin
-			if (writeReg != 5'b00000 && regWrite && ~float)  //not register zero, regWrite is ON, and not float
+			if (writeReg != 5'b00000 && regWrite)  //not register zero, regWrite is ON
 					registers_i[writeReg] = writeData;
 		end
 
 		//Reading at negative clock
 		if (~clk) begin
-			if (~float) begin
-				dataOut1 = registers_i[readReg1];
-				dataOut2 = registers_i[readReg2];
-			end
+			dataOut1 = registers_i[readReg1];
+			dataOut2 = registers_i[readReg2];
+			dataOut3 = registers_i[readReg3];
 		end
 	end
 endmodule

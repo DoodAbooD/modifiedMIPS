@@ -67,6 +67,13 @@ module ALU(in1,in2,out1,out2,o,z,control);
             // NOR
             4'b0111: out1 = ~(in1 | in2); 
 
+            // Shift Left
+            4'b1000: out1 = in2 << in1;
+
+            // Shift Right
+            4'b1001: out1 = in2 >> in1;
+            
+            
             // Signed Addition
             4'b1010: begin
                 out1 = in1 + in2;
@@ -152,7 +159,6 @@ module ALU(in1,in2,out1,out2,o,z,control);
                         out2 = in1 % helper2;
                         out1 = (~out1) + 1; // convert quotient to negative
                     end                
-                //TODO: shift instructions
 
             end
 			

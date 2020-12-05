@@ -1,4 +1,5 @@
-module IDEX(clk, 
+module IDEX(clk,
+iEqNe, iBranch, 
 iRWrite, iFloat, 
 iWBsrc, iMWrite
 iHiLoWrite,  iHL,
@@ -6,6 +7,7 @@ iALUop,
 iRegOut1, iFun, iRegOut2, iRegOut3,
 iDstReg, iIm
 
+oEqNe, oBranch, 
 oRWrite, oFloat, 
 oWBsrc, oMWrite
 oHiLoWrite, oHL, 
@@ -15,6 +17,7 @@ oDstReg, oIm
 );
     input clk;
 
+    input iEqNe, iBranch;
     input iRWrite,iFloat;
     input [1:0] iWBsrc;
     input iMWrite;
@@ -25,6 +28,7 @@ oDstReg, oIm
     input [4:0] iDstReg;
     input [15:0] iIm;
 
+    output oEqNe, oBranch;
     output oRWrite,oFloat;
     output [1:0] oWBsrc;
     output oMWrite;
@@ -35,6 +39,7 @@ oDstReg, oIm
     output [4:0] oDstReg;
     output [15:0] oIm;
 
+    reg internal_EqNe, internal_Branch;
     reg internal_RWrite,internal_Float;
     reg [1:0] internal_WBsrc;
     reg internal_MWrite;
@@ -45,6 +50,8 @@ oDstReg, oIm
     reg [4:0] internal_DstReg;
     reg [15:0] internal_Im;
 
+    assign oEqNe = internal_EqNe;
+    assign oBranch = internal_Branch;
     assign oRWrite = internal_RWrite;
     assign oFloat = internal_Float;
     assign oWBsrc = internal_WBsrc;
@@ -61,6 +68,8 @@ oDstReg, oIm
 
 
     initial begin
+        internal_EqNe = 0;
+        internal_Branch = 0;
         internal_RWrite = 0;
         internal_Float = 0;
         internal_WBsrc = 0;
@@ -77,6 +86,8 @@ oDstReg, oIm
     end
 
     always @(posedge clk) begin
+        internal_EqNe <= iEqNe;
+        internal_Branch <= iBranch;
         internal_RWrite <= iRWrite;
         internal_Float <= iFloat;
         internal_WBsrc <= iWBsrc;

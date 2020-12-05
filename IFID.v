@@ -1,8 +1,8 @@
-module IFID(clk, pcp4, ins, pcp4o, op, rs_fmt, rt_ft, rd_fs, sh_fd, fun, im, ad);
+module IFID(clk, iPcp4, ins, oPcp4, op, rs_fmt, rt_ft, rd_fs, sh_fd, fun, im, ad);
     input clk;
-    input [31:0] pcp4;
+    input [31:0] iPcp4;
     input [31:0] ins;
-    output [31:0] pcp4o;
+    output [31:0] oPcp4;
     output [5:0] op;
     output [4:0] rs_fmt;
     output [4:0] rt_ft;
@@ -15,7 +15,7 @@ module IFID(clk, pcp4, ins, pcp4o, op, rs_fmt, rt_ft, rd_fs, sh_fd, fun, im, ad)
     reg [31:0] internal_pcp4;
     reg [31:0] internal_ins;
 
-    assign pcp4o = internal_pcp4;
+    assign oPcp4 = internal_pcp4;
     assign op = internal_ins[31:26];
     assign rs_fmt = internal_ins[25:21];
     assign rt_ft = internal_ins[20:16];
@@ -33,7 +33,7 @@ module IFID(clk, pcp4, ins, pcp4o, op, rs_fmt, rt_ft, rd_fs, sh_fd, fun, im, ad)
 
     always @(posedge clk) begin
 			
-        internal_pcp4 <= pcp4;
+        internal_pcp4 <= iPcp4;
         internal_ins <= ins;
     end
 

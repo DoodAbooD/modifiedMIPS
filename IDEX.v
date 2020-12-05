@@ -2,7 +2,6 @@ module IDEX(clk,
 iEqNe, iBranch, 
 iRWrite, iFloat, 
 iWBsrc, iMWrite
-iHiLoWrite,  iHL,
 iALUop,
 iRegOut1, iFun, iRegOut2, iRegOut3,
 iDstReg, iIm
@@ -10,7 +9,6 @@ iDstReg, iIm
 oEqNe, oBranch, 
 oRWrite, oFloat, 
 oWBsrc, oMWrite
-oHiLoWrite, oHL, 
 oALUop,
 oRegOut1, oFun, oRegOut2, oRegOut3,
 oDstReg, oIm
@@ -21,7 +19,6 @@ oDstReg, oIm
     input iRWrite,iFloat;
     input [1:0] iWBsrc;
     input iMWrite;
-    input iHiLoWrite, iHL;
     input [1:0] iALUop;
     input [31:0] iRegOut1, iRegOut2, iRegOut3;
     input [5:0] iFun;
@@ -32,7 +29,6 @@ oDstReg, oIm
     output oRWrite,oFloat;
     output [1:0] oWBsrc;
     output oMWrite;
-    output oHiLoWrite, oHL;
     output [1:0] oALUop;
     output [31:0] oRegOut1, oRegOut2, oRegOut3;
     output [5:0] oFun;
@@ -43,7 +39,6 @@ oDstReg, oIm
     reg internal_RWrite,internal_Float;
     reg [1:0] internal_WBsrc;
     reg internal_MWrite;
-    reg internal_HiLoWrite, internal_HL;
     reg [1:0] internal_ALUop;
     reg [31:0] internal_RegOut1, internal_RegOut2, internal_RegOut3;
     reg [5:0] internal_Fun;
@@ -56,8 +51,6 @@ oDstReg, oIm
     assign oFloat = internal_Float;
     assign oWBsrc = internal_WBsrc;
     assign oMWrite = internal_MWrite;
-    assign oHiLoWrite = internal_HiLoWrite;
-    assign oHL = internal_HL;
     assign oALUop = internal_ALUop;
     assign oRegOut1 = internal_RegOut1;
     assign oRegOut2 = internal_RegOut2;
@@ -74,8 +67,6 @@ oDstReg, oIm
         internal_Float = 0;
         internal_WBsrc = 0;
         internal_MWrite = 0;
-        internal_HiLoWrite = 0;
-        internal_HL = 0;
         internal_ALUop = 0;
         internal_RegOut1 = 0;
         internal_RegOut2 = 0;
@@ -92,8 +83,6 @@ oDstReg, oIm
         internal_Float <= iFloat;
         internal_WBsrc <= iWBsrc;
         internal_MWrite <= iMWrite;
-        internal_HiLoWrite <= iHiLoWrite;
-        internal_HL <= iHL;
         internal_ALUop <= iALUop;
         internal_RegOut1 <= iRegOut1;
         internal_RegOut2 <= iRegOut2;

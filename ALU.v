@@ -1,14 +1,14 @@
 /* Control Signals
 0000 AND
 0001 OR
-0010 Unsigned Addition
+0010 Addition
 0011 Unsigned Subtraction
 0100 Set Less Than
 0101 Set Less Than Unsigned
 0111 NOR
 1000 Shift Left
 1001 Shift Right
-1010 Signed Addition
+1010 Shift Right Logical
 1011 Signed Subtraction
 1100 Unsigned Multiply 
 1101 Unsigned Divide 
@@ -74,11 +74,8 @@ module ALU(in1,in2,out1,out2,o,z,control);
             4'b1001: out1 = in2 >> in1;
             
             
-            // Signed Addition
-            4'b1010: begin
-                out1 = in1 + in2;
-                if ( (in1[31] == in2[31]) && (in1[31] != out1[31]) ) o = 1; // if same sign inputs, and result sign changed --> overflow occured
-            end
+            // Shift Right Logical
+            4'b1010: out1 = in2 >>> in1;
 
             // Signed Subtraction
             4'b1011: begin

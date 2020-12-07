@@ -1,4 +1,4 @@
-/* Control Signals
+/* ALU Operations
 0000 AND
 0001 OR
 0010 Addition

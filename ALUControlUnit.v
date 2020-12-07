@@ -1,4 +1,4 @@
-/* Control Signals
+/* ALU Operations
 0000 AND
 0001 OR
 0010 Addition
@@ -16,45 +16,72 @@
 1111 Signed Divide 
 */
 
-module ALUControlUnit(op, fun, aluSrc, hiloW, hiloR, hiloS, con, zEx);
+module ALUControlUnit(op, fun, br, eqNe, brS, aluSrc, hiloW, hiloR, hiloS, con, zEx, SnDb);
     input [2:0] op; // From Control Unit
     input [5:0] fun; // From Instruction
 
+    output br; // Branch
+    output eqNe; // Branch Equal or Not Equal (For Floating, FP True or False)
+    output brS; // Branch condition Source (Zero Flag or FPC)
     output [3:0] con; // ALU Control Code
-    output hiloW; //Writes to HI/LO Registers
-    output hiloR; // Reads from HI/LO (Sends values to MEM stage)
-    output hiloS; // Selects HI or LO register
-    output zEx; // Sets Zero Extend for immediate value
+    output hiloW; // Write to HI/LO Registers
+    output hiloR; // Read from HI/LO (Sends values to MEM stage)
+    output hiloS; // Select HI or LO register
+    output zEx; // Set Zero Extend for immediate value (Instead of Sign extend)
     output [1:0] aluSrc; //selects ALU source
+    output SnDb; // Single or Double Instruction
+    
 
 
     reg [3:0] con;
-    reg hiloW, zEx, hiloR, hiloS;
+    reg br, eqNe, brS, hiloW, zEx, hiloR, hiloS, SnDb;
     reg [1:0] aluSrc;
 
     always@(*) begin
-        hiloW = 0; zEx = 0; aluSrc = 0, hiloR = 0, hiloS = 0;
+        br = 0; eqNe = 0; brS = 0;
+        hiloW = 0; zEx = 0; aluSrc = 0; 
+        hiloR = 0; hiloS = 0; SnDb = 0;
         case (op)
-        2'b000: begin    // Loads / Stores / Add Immediate / Addiu (for now)-> Addition, ALU 2nd source is Im
+        3'b000: begin    // Loads / Stores / Add Immediate / Addiu (for now)-> Addition, ALU 2nd source is Im
             con = 4'b0010; 
             aluSrc = 2'b01; // Select immediate value
         end 
 
-        2'b001: con = 4'b0011;  // beq/bne -> Unsigned Subtraction
+        3'b001: begin  // beq --> Unsigned Subtraction, set branch
+            con = 4'b0011;
+            br = 1;
+        end
+        3'b011: begin  // bne --> Unsigned Subtraction, set branch, set eqNe
+            con = 4'b0011;
+            br = 1;
+            eqNe = 1;
+        end
 
-        2'b100: begin  // And Immediate -> And operation, Alu 2nd src is Immediate, Immediate is zero extended
+        3'b110: begin  // branch on FP True --> set branch, set branch source
+            br = 1;
+            brS = 1;
+        end
+
+        3'b111: begin  // branch on FP False --> set branch, set branch source, set eqNe
+            br = 1;
+            brS = 1;
+            eqNe = 1;
+        end
+
+
+        3'b100: begin  // And Immediate -> And operation, Alu 2nd src is Immediate, Immediate is zero extended
             con = 4'b0000;
             aluSrc = 2'b01; // Select immediate value
             zEx = 1; //Zero extension
         end
 
-        2'b101: begin  // Or Immediate -> Or operation, Alu 2nd src is Immediate, Immediate is zero extended
+        3'b101: begin  // Or Immediate -> Or operation, Alu 2nd src is Immediate, Immediate is zero extended
             con = 4'b0001;
             aluSrc = 2'b01; // Select immediate value
             zEx = 1; //Zero extension
         end
 
-        2'b010: begin // Integers R-Type Ins.
+        3'b010: begin // Integers R-Type Ins.
             case (fun)
             6'b100000: con = 4'b0010;  // R Add -> Addition
             6'b010100: con = 4'b0000; // R And -> And

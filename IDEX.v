@@ -4,14 +4,14 @@ iWBsrc, iMWrite
 iALUop,
 iRegOut1, iFun, iRegOut2, iRegOut3,
 iFloat1P1, iFloat2P1,
-iDstReg, iIm
+iFmt, iDstReg, iIm
 
 oRWrite, oDW, oFloat, 
 oWBsrc, oMWrite
 oALUop,
 oRegOut1, oFun, oRegOut2, oRegOut3,
 oFloat1P1, oFloat2P1,
-oDstReg, oIm
+oFmt, oDstReg, oIm
 );
     input clk;
 
@@ -21,7 +21,7 @@ oDstReg, oIm
     input [1:0] iALUop;
     input [31:0] iRegOut1, iRegOut2, iRegOut3, iFloat1P1, iFloat2P1;
     input [5:0] iFun;
-    input [4:0] iDstReg;
+    input [4:0] iFmt, iDstReg;
     input [15:0] iIm;
 
     output oRWrite, oDW, oFloat;
@@ -30,7 +30,7 @@ oDstReg, oIm
     output [1:0] oALUop;
     output [31:0] oRegOut1, oRegOut2, oRegOut3, oFloat1P1, oFloat2P1;
     output [5:0] oFun;
-    output [4:0] oDstReg;
+    output [4:0] oFmt, oDstReg;
     output [15:0] oIm;
 
     reg internal_RWrite, internal_DW, internal_Float;
@@ -40,7 +40,7 @@ oDstReg, oIm
     reg [31:0] internal_RegOut1, internal_RegOut2, internal_RegOut3;
     reg [31:0] internal_Float1P1, internal_Float2P1;
     reg [5:0] internal_Fun;
-    reg [4:0] internal_DstReg;
+    reg [4:0] internal_Fmt, internal_DstReg;
     reg [15:0] internal_Im;
 
     assign oRWrite = internal_RWrite;
@@ -55,6 +55,7 @@ oDstReg, oIm
     assign oFloat1P1 = internal_Float1P1;
     assign oFloat2P1 = internal_Float2P1;
     assign oFun = internal_Fun;
+    assign oFmt = internal_Fmt;
     assign oDstReg = internal_DstReg;
     assign oIm = internal_Im;
 
@@ -72,6 +73,7 @@ oDstReg, oIm
         internal_Float1P1 = 0;
         internal_Float2P1 = 0;
         internal_Fun = 0;
+        internal_Fmt = 0;
         internal_DstReg = 0;  
         internal_Im = 0;
     end
@@ -89,6 +91,7 @@ oDstReg, oIm
         internal_Float1P1 <= iFloat1P1;
         internal_Float2P1 <= iFloat2P1;
         internal_Fun <= iFun;
+        internal_Fmt <= iFmt;
         internal_DstReg <= iDstReg;
         internal_Im <= iIm;
     end

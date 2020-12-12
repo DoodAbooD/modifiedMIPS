@@ -1,4 +1,4 @@
-/* ALU Operations
+/* Control Signals
 0000 AND
 0001 OR
 0010 Addition
@@ -16,59 +16,49 @@
 1111 Signed Divide 
 */
 
-module ALUControlUnit(op, fun, br, eqNe, brS, aluSrc, hiloW, hiloR, hiloS, con, zEx, SnDb);
+module ALUControlUnit(op, fun, fmt,
+ br, eqNe, brS, aluSrc, hiloR, hiloW,
+con, hiloS, SnDb, FPCw, zEx);
     input [2:0] op; // From Control Unit
     input [5:0] fun; // From Instruction
+    input [4:0] fmt; // From Instruction
 
-    output br; // Branch
-    output eqNe; // Branch Equal or Not Equal (For Floating, FP True or False)
-    output brS; // Branch condition Source (Zero Flag or FPC)
-    output [3:0] con; // ALU Control Code
-    output hiloW; // Write to HI/LO Registers
-    output hiloR; // Read from HI/LO (Sends values to MEM stage)
-    output hiloS; // Select HI or LO register
-    output zEx; // Set Zero Extend for immediate value (Instead of Sign extend)
+    output br; // Branch Instruction
+    output eqNe; // Branch is Equal or Not Equal / FP True or False
+    output brS; // Branch source (Integer branch or Float branch)
     output [1:0] aluSrc; //selects ALU source
-    output SnDb; // Single or Double Instruction
+    output hiloR; // Reads from HI/LO (Sends values to MEM stage)
+    output hiloW; //Writes to HI/LO Registers
+    output [3:0] con; // ALU Control Code
+    output hiloS; // Selects HI or LO register
+    output SnDb; // Float Format (Single or Double)
+    output FPCw; //Write to FPC register
+    output zEx; // Sets Zero Extend for immediate value
+
+    reg br, eqNe, brS, hiloR, hiloW, hiloS, SnDb, FPCw, zEx;
+    reg [1:0] aluSrc;
+    reg [3:0] con;
     
 
-
-    reg [3:0] con;
-    reg br, eqNe, brS, hiloW, zEx, hiloR, hiloS, SnDb;
-    reg [1:0] aluSrc;
-
     always@(*) begin
-        br = 0; eqNe = 0; brS = 0;
-        hiloW = 0; zEx = 0; aluSrc = 0; 
-        hiloR = 0; hiloS = 0; SnDb = 0;
+        br = 0; eqNe = 0; brS = 0; aluSrc = 0; hiloR = 0; hiloW = 0;
+        con = 0; hiloS = 0; SnDb = 0; FPCw = 0; zEx = 0;
+
         case (op)
-        3'b000: begin    // Loads / Stores / Add Immediate / Addiu (for now)-> Addition, ALU 2nd source is Im
+        3'b000: begin    // Loads / Stores / LoadFP & StoreFP (Single & Double) /  Add Immediate / Addiu (for now)-> Addition, ALU 2nd source is Im
             con = 4'b0010; 
             aluSrc = 2'b01; // Select immediate value
         end 
 
-        3'b001: begin  // beq --> Unsigned Subtraction, set branch
-            con = 4'b0011;
+        3'b001: begin   // beq -> br , Unsigned Subtraction
             br = 1;
+            con = 4'b0011;  
         end
-        3'b011: begin  // bne --> Unsigned Subtraction, set branch, set eqNe
-            con = 4'b0011;
+        3'b011: begin  // bne -> br, eqNe, Unsigned Subtraction
             br = 1;
             eqNe = 1;
+            con = 4'b0011;  
         end
-
-        3'b110: begin  // branch on FP True --> set branch, set branch source
-            br = 1;
-            brS = 1;
-        end
-
-        3'b111: begin  // branch on FP False --> set branch, set branch source, set eqNe
-            br = 1;
-            brS = 1;
-            eqNe = 1;
-        end
-
-
         3'b100: begin  // And Immediate -> And operation, Alu 2nd src is Immediate, Immediate is zero extended
             con = 4'b0000;
             aluSrc = 2'b01; // Select immediate value
@@ -129,6 +119,19 @@ module ALUControlUnit(op, fun, br, eqNe, brS, aluSrc, hiloW, hiloR, hiloS, con, 
             
             endcase
         end
+
+
+        3'b111: begin // FLoat R Instructions 
+            case (fmt)
+            6'b000000: begin
+                
+            end
+
+            endcase
+
+        end
+
+
 
         endcase
 

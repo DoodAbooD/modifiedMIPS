@@ -1,12 +1,12 @@
 /* Control Signals
-0000 AND
-0001 OR
-0010 Addition
-0011 Unsigned Subtraction
-0100 Set Less Than
-0101 Set Less Than Unsigned
-0111 NOR
-1000 Shift Left
+0000 AND | Single Float Add 
+0001 OR | Single Float Compare eq
+0010 Addition | Single Float Compare lt
+0011 Unsigned Subtraction | Single Float Compare le
+0100 Set Less Than | Double Float Add 
+0101 Set Less Than Unsigned | Double Float Compare eq
+0111 NOR | Double Float Compare lt
+1000 Shift Left | Double Float Compare le
 1001 Shift Right
 1010 Shift Right Logical
 1011 Signed Subtraction
@@ -16,12 +16,13 @@
 1111 Signed Divide 
 */
 
-module ALUControlUnit(op, fun, fmt,
+module ALUControlUnit(op, fun, fmt, ft,
  br, eqNe, brS, aluSrc, hiloR, hiloW,
 con, hiloS, SnDb, FPCw, zEx);
     input [2:0] op; // From Control Unit
     input [5:0] fun; // From Instruction
     input [4:0] fmt; // From Instruction
+    input ft; //For Branch on FP instructions
 
     output br; // Branch Instruction
     output eqNe; // Branch is Equal or Not Equal / FP True or False
@@ -120,11 +121,59 @@ con, hiloS, SnDb, FPCw, zEx);
             endcase
         end
 
-
         3'b111: begin // FLoat R Instructions 
             case (fmt)
-            6'b000000: begin
+            6'b01000: begin // Branch on FP -> br, brS
+                br = 1;
+                brS = 1;
+                eqNe = ~ft; // bc1t/bc1f
+            end
+
+            6'b10000: begin // Single Float Arithmetic
+                case (fun)
+                6'b000000: con = 4'b0000; // Add Single Float
+
+                6'b110010: begin //  Single Float Compare eq
+                    FPCw = 1;
+                    con = 4'b0001;
+                end
+
+                6'b111100: begin //  Single Float Compare lt
+                    FPCw = 1;
+                    con = 4'b0010;
+                end
                 
+                6'b111110: begin //  Single Float Compare le
+                    FPCw = 1;
+                    con = 4'b0011;
+                end
+
+                endcase
+            end
+
+            6'b10001: begin // Double Float Arithmetic
+
+                case (fun)
+                6'b000000: con = 4'b0100; // Add Single Float
+
+                6'b110010: begin //  Single Float Compare eq
+                    FPCw = 1;
+                    con = 4'b0101;
+                end
+
+                6'b111100: begin //  Single Float Compare lt
+                    FPCw = 1;
+                    con = 4'b0111;
+                end
+                
+                6'b111110: begin //  Single Float Compare le
+                    FPCw = 1;
+                    con = 4'b1000;
+                end
+
+                endcase                
+            
+            
             end
 
             endcase

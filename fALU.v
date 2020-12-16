@@ -8,6 +8,11 @@ module fALU(in1, in2, control, con, out);
     reg con;
     reg [63:0] out;
 
+    //helpers
+    reg carry;
+    reg [22:0] smaller_single_mant;
+    
+
     wire [31:0] in1_single = in1[63:32];
     wire [31:0] in2_single = in1[63:32];
 
@@ -36,7 +41,14 @@ module fALU(in1, in2, control, con, out);
         case (control)
         
         4'b0000: begin // Single Float Add 
+            if (i1s_exp > i2s_exp) begin  // in1 is larger
+                smaller_single_mant = i2s_mant/(i1s_exp - i2s_exp);
+                //TODO
+
+            end
             
+            smaller_single_mant = 
+            out[63:32] = {}{}{}
         end
 
         4'b0001: begin // Single Float Compare eq

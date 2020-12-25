@@ -9,7 +9,7 @@ module fALU(in1, in2, control, con, out);
     reg [63:0] out;
     
     wire [31:0] in1_single = in1[63:32];
-    wire [31:0] in2_single = in1[63:32];
+    wire [31:0] in2_single = in2[63:32];
 
     //Single Precision
     wire [22:0] i1s_mant = in1_single[22:0]; // Mantissa of first input for single
@@ -158,11 +158,11 @@ module fALU(in1, in2, control, con, out);
                         // Exponent starts at the same value of the input exponent, and decreases depending on the number of leading zeros in mantissa
                         result_exp_temp = i1s_exp;
                         while (result_mant_temp[22] == 0) begin
-                            result_mant_temp << 1; // normalizing mantissa
+                            result_mant_temp = result_mant_temp << 1; // normalizing mantissa
                             result_exp_temp = result_exp_temp - 1; 
                         end
                         // One last shift left and exponent decrease
-                        result_mant_temp << 1;
+                        result_mant_temp  = result_mant_temp << 1;
                         result_exp_temp = result_exp_temp - 1;
 
                         // outputs
@@ -199,12 +199,12 @@ module fALU(in1, in2, control, con, out);
                     small_mant_temp = small_mant_temp >> ((large_exp_temp - small_exp_temp) - 1); 
 
                     // Subtract mantissas, placing leading digit of larger as 1 , and checking if this digit was borrowed from using the carry register
-                    {carry, result_mant_temp} = {1, large_mant_temp} - {0 , small_mant_temp};
+                    {carry, result_mant_temp} = {1'b1, large_mant_temp} - {1'b0 , small_mant_temp};
 
                     // exponent starts as the larger, and decreases if leading one was borrowed from (keeps decreasing until we reach a leading 1)
                     result_exp_temp = large_exp_temp;
                     while (~carry) begin
-                        {carry, result_mant_temp} << 1;
+                        {carry, result_mant_temp} = {carry, result_mant_temp} << 1;
                         result_exp_temp = result_exp_temp - 1;
                     end
 
@@ -361,11 +361,11 @@ module fALU(in1, in2, control, con, out);
                         // Exponent starts at the same value of the input exponent, and decreases depending on the number of leading zeros in mantissa
                         Dresult_exp_temp = i1d_exp;
                         while (Dresult_mant_temp[51] == 0) begin
-                            Dresult_mant_temp << 1; // normalizing mantissa
+                            Dresult_mant_temp = Dresult_mant_temp << 1; // normalizing mantissa
                             Dresult_exp_temp = Dresult_exp_temp - 1; 
                         end
                         // One last shift left and exponent decrease
-                        Dresult_mant_temp << 1;
+                        Dresult_mant_temp = Dresult_mant_temp << 1;
                         Dresult_exp_temp = Dresult_exp_temp - 1;
 
                         // outputs
@@ -402,12 +402,12 @@ module fALU(in1, in2, control, con, out);
                     Dsmall_mant_temp = Dsmall_mant_temp >> ((Dlarge_exp_temp - Dsmall_exp_temp) - 1); 
 
                     // Subtract mantissas, placing leading digit of larger as 1 , and checking if this digit was borrowed from using the carry register
-                    {carry, Dresult_mant_temp} = {1, Dlarge_mant_temp} - {0 , Dsmall_mant_temp};
+                    {carry, Dresult_mant_temp} = {1'b1, Dlarge_mant_temp} - {1'b0 , Dsmall_mant_temp};
 
                     // exponent starts as the larger, and decreases if leading one was borrowed from (keeps decreasing until we reach a leading 1)
                     Dresult_exp_temp = Dlarge_exp_temp;
                     while (~carry) begin
-                        {carry, Dresult_mant_temp} << 1;
+                        {carry, Dresult_mant_temp} = {carry, Dresult_mant_temp} << 1;
                         Dresult_exp_temp = Dresult_exp_temp - 1;
                     end
 

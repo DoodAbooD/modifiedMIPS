@@ -18,7 +18,7 @@
 
 module ALUControlUnit(op, fun, fmt, ft,
  br, eqNe, brS, aluSrc, hiloR, hiloW,
-con, hiloS, SnDb, FPCw, zEx);
+con, hiloS, FPCw, zEx);
     input [2:0] op; // From Control Unit
     input [5:0] fun; // From Instruction
     input [4:0] fmt; // From Instruction
@@ -32,18 +32,17 @@ con, hiloS, SnDb, FPCw, zEx);
     output hiloW; //Writes to HI/LO Registers
     output [3:0] con; // ALU Control Code
     output hiloS; // Selects HI or LO register
-    output SnDb; // Float Format (Single or Double)
     output FPCw; //Write to FPC register
     output zEx; // Sets Zero Extend for immediate value
 
-    reg br, eqNe, brS, hiloR, hiloW, hiloS, SnDb, FPCw, zEx;
+    reg br, eqNe, brS, hiloR, hiloW, hiloS, FPCw, zEx;
     reg [1:0] aluSrc;
     reg [3:0] con;
     
 
     always@(*) begin
         br = 0; eqNe = 0; brS = 0; aluSrc = 0; hiloR = 0; hiloW = 0;
-        con = 0; hiloS = 0; SnDb = 0; FPCw = 0; zEx = 0;
+        con = 0; hiloS = 0; FPCw = 0; zEx = 0;
 
         case (op)
         3'b000: begin    // Loads / Stores / LoadFP & StoreFP (Single & Double) /  Add Immediate / Addiu (for now)-> Addition, ALU 2nd source is Im
@@ -154,19 +153,19 @@ con, hiloS, SnDb, FPCw, zEx);
             6'b10001: begin // Double Float Arithmetic
 
                 case (fun)
-                6'b000000: con = 4'b0100; // Add Single Float
+                6'b000000: con = 4'b0100; // Add Double Float
 
-                6'b110010: begin //  Single Float Compare eq
+                6'b110010: begin //  Double Float Compare eq
                     FPCw = 1;
                     con = 4'b0101;
                 end
 
-                6'b111100: begin //  Single Float Compare lt
+                6'b111100: begin //  Double Float Compare lt
                     FPCw = 1;
                     con = 4'b0111;
                 end
                 
-                6'b111110: begin //  Single Float Compare le
+                6'b111110: begin //  Double Float Compare le
                     FPCw = 1;
                     con = 4'b1000;
                 end
@@ -187,4 +186,3 @@ con, hiloS, SnDb, FPCw, zEx);
     end
 
 endmodule
-

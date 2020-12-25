@@ -1,12 +1,12 @@
 module IDEX(clk,
-iRWrite, iFloat, 
+iRWrite, iByte, iFloat, 
 iWBsrc, iMWrite
 iExOp,
 iRegOut1, iFun, iRegOut2, iRegOut3,
 iFloat1P1, iFloat2P1,
 iFmt, iDstReg, iIm
 
-oRWrite, oFloat, 
+oRWrite, oByte, oFloat, 
 oWBsrc, oMWrite
 oExOp,
 oRegOut1, oFun, oRegOut2, oRegOut3,
@@ -15,8 +15,8 @@ oFmt, oDstReg, oIm
 );
     input clk;
 
-    input iRWrite, iFloat;
-    input [1:0] iWBsrc;
+    input iRWrite, iByte, iFloat;
+    input [2:0] iWBsrc;
     input iMWrite;
     input [2:0] iExOp;
     input [31:0] iRegOut1, iRegOut2, iRegOut3, iFloat1P1, iFloat2P1;
@@ -24,8 +24,8 @@ oFmt, oDstReg, oIm
     input [4:0] iFmt, iDstReg;
     input [15:0] iIm;
 
-    output oRWrite, oFloat;
-    output [1:0] oWBsrc;
+    output oRWrite, oByte, oFloat;
+    output [2:0] oWBsrc;
     output oMWrite;
     output [2:0] oExOp;
     output [31:0] oRegOut1, oRegOut2, oRegOut3, oFloat1P1, oFloat2P1;
@@ -33,8 +33,8 @@ oFmt, oDstReg, oIm
     output [4:0] oFmt, oDstReg;
     output [15:0] oIm;
 
-    reg internal_RWrite, internal_Float;
-    reg [1:0] internal_WBsrc;
+    reg internal_RWrite, internal_Byte, internal_Float;
+    reg [2:0] internal_WBsrc;
     reg internal_MWrite;
     reg [1:0] internal_ExOp;
     reg [31:0] internal_RegOut1, internal_RegOut2, internal_RegOut3;
@@ -44,6 +44,7 @@ oFmt, oDstReg, oIm
     reg [15:0] internal_Im;
 
     assign oRWrite = internal_RWrite;
+    assign oByte = internal_Byte;
     assign oFloat = internal_Float;
     assign oWBsrc = internal_WBsrc;
     assign oMWrite = internal_MWrite;
@@ -61,6 +62,7 @@ oFmt, oDstReg, oIm
 
     initial begin
         internal_RWrite = 0;
+        internal_Byte = 0;
         internal_Float = 0;
         internal_WBsrc = 0;
         internal_MWrite = 0;
@@ -78,6 +80,7 @@ oFmt, oDstReg, oIm
 
     always @(posedge clk) begin
         internal_RWrite <= iRWrite;
+        internal_Byte <= iByte;
         internal_Float <= iFloat;
         internal_WBsrc <= iWBsrc;
         internal_MWrite <= iMWrite;

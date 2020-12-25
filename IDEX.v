@@ -1,14 +1,14 @@
 module IDEX(clk,
 iRWrite, iFloat, 
 iWBsrc, iMWrite
-iALUop,
+iExOp,
 iRegOut1, iFun, iRegOut2, iRegOut3,
 iFloat1P1, iFloat2P1,
 iFmt, iDstReg, iIm
 
 oRWrite, oFloat, 
 oWBsrc, oMWrite
-oALUop,
+oExOp,
 oRegOut1, oFun, oRegOut2, oRegOut3,
 oFloat1P1, oFloat2P1,
 oFmt, oDstReg, oIm
@@ -18,7 +18,7 @@ oFmt, oDstReg, oIm
     input iRWrite, iFloat;
     input [1:0] iWBsrc;
     input iMWrite;
-    input [1:0] iALUop;
+    input [2:0] iExOp;
     input [31:0] iRegOut1, iRegOut2, iRegOut3, iFloat1P1, iFloat2P1;
     input [5:0] iFun;
     input [4:0] iFmt, iDstReg;
@@ -27,7 +27,7 @@ oFmt, oDstReg, oIm
     output oRWrite, oFloat;
     output [1:0] oWBsrc;
     output oMWrite;
-    output [1:0] oALUop;
+    output [2:0] oExOp;
     output [31:0] oRegOut1, oRegOut2, oRegOut3, oFloat1P1, oFloat2P1;
     output [5:0] oFun;
     output [4:0] oFmt, oDstReg;
@@ -36,7 +36,7 @@ oFmt, oDstReg, oIm
     reg internal_RWrite, internal_Float;
     reg [1:0] internal_WBsrc;
     reg internal_MWrite;
-    reg [1:0] internal_ALUop;
+    reg [1:0] internal_ExOp;
     reg [31:0] internal_RegOut1, internal_RegOut2, internal_RegOut3;
     reg [31:0] internal_Float1P1, internal_Float2P1;
     reg [5:0] internal_Fun;
@@ -47,7 +47,7 @@ oFmt, oDstReg, oIm
     assign oFloat = internal_Float;
     assign oWBsrc = internal_WBsrc;
     assign oMWrite = internal_MWrite;
-    assign oALUop = internal_ALUop;
+    assign oExOp = internal_ExOp;
     assign oRegOut1 = internal_RegOut1;
     assign oRegOut2 = internal_RegOut2;
     assign oRegOut3 = internal_RegOut3;
@@ -64,7 +64,7 @@ oFmt, oDstReg, oIm
         internal_Float = 0;
         internal_WBsrc = 0;
         internal_MWrite = 0;
-        internal_ALUop = 0;
+        internal_ExOp = 0;
         internal_RegOut1 = 0;
         internal_RegOut2 = 0;
         internal_RegOut3 = 0;
@@ -81,7 +81,7 @@ oFmt, oDstReg, oIm
         internal_Float <= iFloat;
         internal_WBsrc <= iWBsrc;
         internal_MWrite <= iMWrite;
-        internal_ALUop <= iALUop;
+        internal_ExOp <= iExOp;
         internal_RegOut1 <= iRegOut1;
         internal_RegOut2 <= iRegOut2;
         internal_RegOut3 <= iRegOut3;

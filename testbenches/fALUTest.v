@@ -78,21 +78,21 @@ module fALUTest();
             6:  begin
                 in1 = 64'h40109E6660F0B59C;
                 in2 = 64'h4010BA02224BD249;
-                control = 4'b0000;
+                control = 4'b0100;
                 $strobe("result = : %h" , out, " The correct value is 4020AC34419E43F2"); 
             end
 
             7:  begin
                 in1 = 64'h40109E6660F0B59C;
                 in2 = 64'hC0B1D17CD10164DA;
-                control = 4'b0000;
+                control = 4'b0100;
                 $strobe("result = : %h" , out, " The correct value is C0B1CD55376928AD"); 
             end
 
             8:  begin
                 in1 = 64'h3EB00D5AABBE29E6;
                 in2 = 64'h3EBEF71923F4E584;
-                control = 4'b0000;
+                control = 4'b0100;
                 $strobe("result = : %h" , out, " The correct value is 3EC78239E7D987B5"); 
             end
 
@@ -141,14 +141,14 @@ module fALUTest();
                 in1[63:32] = 32'h43CE63D7;
                 in2[63:32] = 32'h3F652867;
                 control = 4'b0010; // lt
-                $strobe("condition = : %h" , con, " The correct value is 1"); 
+                $strobe("condition = : %h" , con, " The correct value is 0"); 
             end
 
             15:  begin
                 in1[63:32] = 32'h43CE63D7;
                 in2[63:32] = 32'h3F652867;
                 control = 4'b0011; // le
-                $strobe("condition = : %h" , con, " The correct value is 1"); 
+                $strobe("condition = : %h" , con, " The correct value is 0"); 
             end
 
             16:  begin

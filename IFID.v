@@ -1,5 +1,5 @@
-module IFID(clk, iPcp4, ins, oPcp4, op, rs_fmt, rt_ft, rd_fs, sh_fd, fun, im, ad);
-    input clk;
+module IFID(clk, iPcp4, ins, oPcp4, op, rs_fmt, rt_ft, rd_fs, sh_fd, fun, im, ad , stall);
+    input clk, stall;
     input [31:0] iPcp4;
     input [31:0] ins;
     output [31:0] oPcp4;
@@ -32,9 +32,10 @@ module IFID(clk, iPcp4, ins, oPcp4, op, rs_fmt, rt_ft, rd_fs, sh_fd, fun, im, ad
     end
 
     always @(posedge clk) begin
-			
-        internal_pcp4 <= iPcp4;
-        internal_ins <= ins;
+		if (~stall) begin	
+            internal_pcp4 <= iPcp4;
+            internal_ins <= ins;
+        end
     end
 
 endmodule

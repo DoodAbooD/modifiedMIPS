@@ -1,16 +1,16 @@
-module PC (in, out, w);
-    input [31:0] in;
-    output [31:0] out;
-	 output w;
+// Dont think we need this bad boy
 
-    reg [31:0] out;
+module PC (PCin, PCout , clk, stall);
+    input [31:0] PCin;
+    input clk, stall;
+    output [31:0] PCout;
+    reg [31:0] PCout;
 	 
-
     initial 
-        out = 0;
+        PCout = 0;
 
-	 always @(*) begin
-		if (w) out = in;
+	 always @(posedge clk) begin
+		if (~stall) PCout = PCin;
 	 end
 	 
 	

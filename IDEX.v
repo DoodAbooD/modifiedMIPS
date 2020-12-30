@@ -17,7 +17,7 @@ oFmt, oFt, oDstReg, oIm, oRd
 );
     input clk, stall;
 
-    input iFlush, iRWrite, iByte, iFloat, iDW,
+    input iFlush, iRWrite, iByte, iFloat, iDW;
     input [2:0] iWBsrc;
     input iMWrite;
     input [31:0] iPcp4;
@@ -27,7 +27,7 @@ oFmt, oFt, oDstReg, oIm, oRd
     input [4:0] iFmt, iFt, iDstReg, iRd;
     input [15:0] iIm;
 
-    output oFlush, oRWrite, oByte, oFloat, oDW,
+    output oFlush, oRWrite, oByte, oFloat, oDW;
     output [2:0] oWBsrc;
     output oMWrite;
     output [31:0] oPcP4;

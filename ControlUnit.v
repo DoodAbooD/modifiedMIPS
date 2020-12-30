@@ -175,7 +175,7 @@ always @(*) begin
         RegDst <= 1;  // Selecting ft as destination register
         WBSrc <= 1;  // Selecting memory output as WB source
         ExOp <= 3'b000; // Execution stage op code
-    
+    end
     
     6'b110101: begin // Load FP Double
         RegWrite <= 1; // Writing to register

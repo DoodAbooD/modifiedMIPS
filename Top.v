@@ -234,9 +234,7 @@ module Top(PC_VALUE);// testbench holds the PC Value.
 	wire EXMEM_Out_Write; // Write to Register File
 	wire EXMEM_Out_Float; // Float Instruction
 	wire [1:0] EXMEM_Out_WBsrc; // Write back data source select
-	wire EXMEM_Out_Flush; // Flush Enable 
 	wire [4:0] EXMEM_Out_DstReg; // Destination Register from Exec Stage
-	wire [4:0] MEMWB_Out_DstReg; // Destination Register from Mem Stage
 
 	//Modules
 	MUX_4_32 MUX20(IDEX_Out_RegOut1, EXMEM_Out_ALUout1, MUX19_Out, 0, Rd_Fwd_Control, MUX20_Out);
@@ -247,7 +245,7 @@ module Top(PC_VALUE);// testbench holds the PC Value.
 	module ALUControlUnit(op, fun, fmt, ft,
 	br, eqNe, brS, aluSrc, hiloR, hiloW,
 	con, hiloS, FPCw, zEx);
-	*/ <<
+	*/ 
 	ALUControlUnit ALU_Control_Unit(IDEX_Out_ExOp, IDEX_Out_fun, IDEX_Out_Fmt, IDEX_Out_Ft[0], 
 	ALUCU_Out_br, ALUCU_Out_eqNe, ALUCU_Out_brS, ALUCU_Out_aluSrc, ALUCU_Out_HiloR, ALUCU_Out_hiloW, 
 	ALUCU_Out_Con, ALUCU_Out_hiloS, ALUCU_Out_FPCw, ALUCU_Out_zEx);

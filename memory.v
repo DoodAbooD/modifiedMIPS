@@ -52,7 +52,7 @@ module DataMemory (address, in1, in2, byte, write, dWrite, out1, out2);
 
 		//Reading
 		if (byte) begin
-			out1 = {24'0 , mem[address]};
+			out1 = {24'b0 , mem[address]};
 		end
 		else begin
 			out1[31:24] = mem[address];

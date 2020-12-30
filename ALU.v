@@ -155,7 +155,8 @@ module ALU(in1,in2,out1,out2,o,z,control);
                         out1 = in1 / helper2;
                         out2 = in1 % helper2;
                         out1 = (~out1) + 1; // convert quotient to negative
-                    end                
+                    end 
+                end               
 
             end
 			

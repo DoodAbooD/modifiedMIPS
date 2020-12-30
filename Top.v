@@ -11,6 +11,8 @@ module Top(PC_VALUE);// testbench holds the PC Value.
 	wire clk;
 	clock Clock(clk);
 
+
+
 	// *************************************************
 	// **** WIRING OF STAGE 1 : INSTRUCTION FETCH ******
 	// *************************************************
@@ -33,7 +35,7 @@ module Top(PC_VALUE);// testbench holds the PC Value.
 	//Modules
 	MUX2_32 MUX1(PCP4, Branch_Address, Branch_Decision, MUX1_Out);
 	MUX2_32 MUX2(MUX1_Out, Jump_Address, C_Out_Jump, MUX2_Out);
-	PC ProgramCounter(MUX2_Out, PC_Out, clk, stall_enable);
+	PC program_counter(MUX2_Out, PC_Out, clk, stall_enable);
 	instructionMemory IM(Instruction_Out, PC_Out);
 
 	// *************************************************
@@ -107,7 +109,7 @@ module Top(PC_VALUE);// testbench holds the PC Value.
 	ControlUnit Control_Unit(IFID_Out_Op, IFID_Out_fun, IFID_Out_RsFmt,
 	C_Out_JR, C_Out_Byte, C_Out_Jump, C_Out_MemWrite, C_Out_RegWrite, C_Out_Float, 
 	C_Out_Shift, C_Out_RegDst, C_Out_DW, C_Out_WBSrc, C_Out_ExOp);
-	regFile registerFile(IFID_Out_RsFmt, IFID_Out_RtFt, IFID_Out_RdFs,
+	registerFile regFile(IFID_Out_RsFmt, IFID_Out_RtFt, IFID_Out_RdFs,
 	MEMWB_Out_DstReg, MUX19_Out, (MEMWB_Out_Write & ~MEMWB_Out_Float), 
 	RFile_Out_Out1, RFile_Out_Out2, RFile_Out_Out3,
 	IFID_Out_RdFs, IFID_Out_RtFt, 
@@ -181,11 +183,223 @@ module Top(PC_VALUE);// testbench holds the PC Value.
 	IDEX_Out_Pcp4, IDEX_Out_ExOp,
 	IDEX_Out_RegOut1, IDEX_Out_fun, IDEX_Out_RegOut2, IDEX_Out_RegOut3,
 	IDEX_Out_Float1P1, IDEX_Out_Float2P1, 
-	IDEX_Out_Fmt, IDEX_Out_Ft, IDEX_Out_DstReg, IDEX_Out_Im, IDEX_Out_Rd)
+	IDEX_Out_Fmt, IDEX_Out_Ft, IDEX_Out_DstReg, IDEX_Out_Im, IDEX_Out_Rd);
 	
 
 	// *************************************************
 	
+
+	// *************************************************
+	// **** WIRING OF STAGE 3 : INSTRUCTION EXECUTE ****
+	// *************************************************
+
+	//Wires
+	wire [31:0] MUX20_Out;
+	wire [31:0] MUX21_Out;
+	wire [31:0] MUX22_Out;
+	wire ALUCU_Out_br; // is Branch
+	wire ALUCU_Out_eqNe; // beq / bne
+	wire ALUCU_Out_brS; // Branch Source
+	wire [1:0] ALUCU_Out_aluSrc; // select ALU Source 
+	wire ALUCU_Out_HiloR; // Read from Hi/Lo
+	wire ALUCU_Out_hiloW; // Write to Hi/Lo
+	wire [3:0] ALUCU_Out_Con; // ALU Control code
+	wire ALUCU_Out_hiloS; // Selects Hi or Lo
+	wire ALUCU_Out_FPCw; // Write to FPC
+	wire ALUCU_Out_zEx; // Zero Extend rather than Sign Extend
+	wire [31:0] MUX9_Out;
+	wire [31:0] MUX10_Out;
+	wire [31:0] LO_Out, HI_Out; // Output of LO and HI Registers
+	wire [31:0] MUX11_Out;
+	wire FPC_Out; // Output of FPC Register
+	wire ALU_Out_Z; // Zero flag
+	wire [31:0] ALU_Out_Out1; // First Output of ALU
+	wire [31:0] ALU_Out_Out2; // Second Output of ALU
+	wire fALU_con; // Condition from Floating ALU
+	wire [63:0] fALU_out; // Output of FLoating ALU
+	wire MUX12_Out; // Branch Condition
+	wire MUX13_Out;  
+	wire MUX16_Out;
+	wire [1:0] Rs_Fwd_Control; // Controls forwarding of Register Rs value
+	wire [1:0] Rt_Fwd_Control; // Controls forwarding of Register Rt value
+	wire [1:0] Rd_Fwd_Control; // Controls forwarding of Register Rd value
+	wire overflow;
+	wire MUX14_Out;
+	wire MUX15_Out;
+	
+	
+	//Wires coming from other stages
+	wire [31:0] EXMEM_Out_ALUout1; // EX Out
+	wire [31:0] MUX_19_Out; // MEM Out
+	wire EXMEM_Out_Write; // Write to Register File
+	wire EXMEM_Out_Float; // Float Instruction
+	wire [1:0] EXMEM_Out_WBsrc; // Write back data source select
+	wire EXMEM_Out_Flush; // Flush Enable 
+	wire [4:0] EXMEM_Out_DstReg; // Destination Register from Exec Stage
+	wire [4:0] MEMWB_Out_DstReg; // Destination Register from Mem Stage
+
+	//Modules
+	MUX_4_32 MUX20(IDEX_Out_RegOut1, EXMEM_Out_ALUout1, MUX19_Out, 0, Rd_Fwd_Control, MUX20_Out);
+	MUX_4_32 MUX21(IDEX_Out_RegOut2, EXMEM_Out_ALUout1,MUX19_Out, 0, Rt_Fwd_Control, MUX21_Out);
+	MUX_4_32 MUX22(IDEX_Out_RegOut3, EXMEM_Out_ALUout1, MUX19_Out,0, Rs_Fwd_Control, MUX22_Out);
+	MUX_2_32 MUX9({{16{IDEX_Out_Im[15]}} ,IDEX_Out_Im}, {16'b0 ,IDEX_Out_Im}, ALUCU_Out_zEx, MUX9_Out);
+	/*
+	module ALUControlUnit(op, fun, fmt, ft,
+	br, eqNe, brS, aluSrc, hiloR, hiloW,
+	con, hiloS, FPCw, zEx);
+	*/ <<
+	ALUControlUnit ALU_Control_Unit(IDEX_Out_ExOp, IDEX_Out_fun, IDEX_Out_Fmt, IDEX_Out_Ft[0], 
+	ALUCU_Out_br, ALUCU_Out_eqNe, ALUCU_Out_brS, ALUCU_Out_aluSrc, ALUCU_Out_HiloR, ALUCU_Out_hiloW, 
+	ALUCU_Out_Con, ALUCU_Out_hiloS, ALUCU_Out_FPCw, ALUCU_Out_zEx);
+	// module reg32(in,out,w);
+	reg32 LO(ALU_Out_Out1, LO_Out, ALUCU_Out_hiloW);
+	reg32 HI(ALU_Out_Out2, HI_Out, ALUCU_Out_hiloW);
+	MUX_2_32 MUX11(LO_Out, HI_Out, ALUCU_Out_hiloS, MUX11_Out);
+	reg1 FPC(fALU_con, FPC_Out, ALUCU_Out_FPCw);
+	assign Branch_Address = ({{16{IDEX_Out_Im[15]}} ,IDEX_Out_Im} << 2 ) + IDEX_Out_Pcp4;
+	MUX_4_32 MUX10(MUX21_Out, MUX9_Out, MUX22_Out, 0, ALUCU_Out_aluSrc, MUX10_Out);
+	//module ALU(in1,in2,out1,out2,o,z,control);
+	ALU myALU (MUX20_Out, MUX10_Out, ALU_Out_Out1, ALU_Out_Out2, overflow, ALU_Out_Z, ALUCU_Out_Con);
+	// module fALU(in1, in2, control, con, out);
+	fALU myfALU( {MUX20_Out, IDEX_Out_Float1P1} , {MUX21_Out, IDEX_Out_Float2P1}, ALUCU_Out_Con, fALU_out);
+	MUX_2_1 MUX12(ALU_Out_Z, FPC_Out, ALUCU_Out_brS, MUX12_Out);
+	MUX_2_32 MUX13(ALU_Out_Out1, MUX11_Out, ALUCU_Out_HiloR, MUX13_Out);
+	MUX_2_32 MUX16(MUX13_Out, fALU_out[63:32], IDEX_Out_Float, MUX16_Out);
+	assign Branch_Decision = (ALUCU_Out_eqNe ^ MUX12_Out) & ALUCU_Out_br;
+	MUX_2_1 MUX14(IDEX_Out_RWrite, 0, EXMEM_Out_Flush | stall_enable , MUX14_Out);
+	MUX_2_1 MUX15(IDEX_Out_MWrite, 0, EXMEM_Out_Flush | stall_enable, MUX15_Out);
+	/*
+	module forwardingUnit(ID_Rs, ID_Rt, ID_Rd, 
+	EX_Dst, MEM_Dst, EX_Write, MEM_Write, EX_Float, MEM_Float, WBSrc,
+	FW_Rd, FW_Rt, FW_Rs, stall);
+	*/
+	forwardingUnit ForwardingUnit(IDEX_Out_Fmt, IDEX_Out_Ft, IDEX_Out_Rd,
+	EXMEM_Out_DstReg, MEMWB_Out_DstReg, EXMEM_Out_Write, MEMWB_Out_Write, 
+	EXMEM_Out_Float, MEMWB_Out_Float, EXMEM_Out_WBsrc,
+	Rd_Fwd_Control, Rt_Fwd_Control, Rs_Fwd_Control, stall_enable);
+
+
+
+	// *************************************************
+	// *************************************************
+
+	// ******************* EX / MEM ********************
+
+	wire EXMEM_Out_Byte;
+	wire EXMEM_Out_MWrite;
+	wire EXMEM_Out_DW;
+	wire [31:0] EXMEM_Out_ALUout2;
+	wire [31:0] EXMEM_Out_Pcp4;
+	wire [31:0] EXMEM_Out_RegOut1;
+	wire [31:0] EXMEM_Out_RegOut2;
+	wire [31:0] EXMEM_Out_Im;
+
+	/*
+	module EXMEM ( clk,
+	iFlush, iByte, iWrite, iFloat,
+	iWBsrc, iMWrite, iDW,
+	iALUout1, iALUout2, iPcp4,
+	iRegOut1, iRegOut2, iDstReg, iIm,
+
+	oFlush, oByte, oWrite, oFloat,
+	oWBsrc, oMWrite, oDW,
+	oALUout1, oALUout2, oPcp4,
+	oRegOu1, oRegOut2, oDstReg, oIm
+	);
+	*/
+
+	EXMEM EX_MEM (clk,
+	Branch_Decision, IDEX_Out_Byte, MUX14_Out, IDEX_Out_Float, 
+	IDEX_Out_WBsrc, MUX15_Out, IDEX_Out_DW, 
+	MUX16_Out, fALU_out[31:0], IDEX_Out_Pcp4, 
+	MUX21_Out, IDEX_Out_Float2P1, IDEX_Out_DstReg, {IDEX_Out_Im, 16'b0},
+	EXMEM_Out_Flush, EXMEM_Out_Byte, EXMEM_Out_Write, EXMEM_Out_Float, 
+	EXMEM_Out_WBsrc, EXMEM_Out_MWrite, EXMEM_Out_DW, 
+	EXMEM_Out_ALUout1, EXMEM_Out_ALUout2, EXMEM_Out_Pcp4, 
+	EXMEM_Out_RegOut1, EXMEM_Out_RegOut2, EXMEM_Out_DstReg, EXMEM_Out_Im);
+
+
+	// *************************************************
+
+
+	// *************************************************
+	// **** WIRING OF STAGE 4 : MEMORY ACCESS   ********
+	// *************************************************
+
+	//Wires
+	wire [31:0] Mem_out1;
+	wire [31:0] Mem_out2;
+
+	//Modules
+	//module DataMemory (address, in1, in2, byte, write, dWrite, out1, out2);
+	DataMemory Data_Memory (EXMEM_Out_ALUout1, EXMEM_Out_RegOut1, EXMEM_Out_RegOut2, 
+	EXMEM_Out_Byte, EXMEM_Out_MWrite, EXMEM_Out_DW, Mem_out1, Mem_out2);
+
+
+	// *************************************************
+	// *************************************************
+
+
+	// ******************* MEM / WB ********************
+	wire [1:0] MEMWB_Out_WBsrc; // Selects the source for Write Back Data
+	wire [31:0] MEMWB_Out_ALUout1; // Result from ALU
+	wire [31:0] MEMWB_Out_MemOut1; // Output from Memory
+	wire [31:0] MEMWB_Out_MemOut2; // Second output from memory
+	wire [31:0] MEMWB_Out_Pcp4; // PC + 4
+	wire [31:0] MEMWB_Out_Im; // Immediate value
+	wire [31:0] MEMWB_Out_ALUout2; // Second result from ALU
+	
+	/*
+	module MEMWB ( clk,
+	iWrite, iFloat,
+	iWBsrc, iDW,
+	iALUout1, iMemOut1, iMemOut2,
+	iPcp4, iIm, iDstReg, iALUout2, 
+	oWrite, oFloat,
+	oWBsrc, oDW,
+	oALUout1, oMemOut1, oMemOut2,
+	oPcp4, oIm, oDstReg, oALUout2, 
+	);
+	*/
+
+	MEMWB MEM_WB(clk,
+	EXMEM_Out_Write, EXMEM_Out_Float, 
+	EXMEM_Out_WBsrc, EXMEM_Out_DW, 
+	EXMEM_Out_ALUout1, Mem_out1, Mem_out2, 
+	EXMEM_Out_Pcp4, EXMEM_Out_Im, EXMEM_Out_DstReg, EXMEM_Out_ALUout2,
+	MEMWB_Out_Write, MEMWB_Out_Float, 
+	MEMWB_Out_WBsrc, MEMWB_Out_DW,
+	MEMWB_Out_ALUout1, MEMWB_Out_MemOut1, MEMWB_Out_MemOut2,
+	MEMWB_Out_Pcp4, MEMWB_Out_Im, MEMWB_Out_DstReg, MEMWB_Out_ALUout2);
+
+
+
+	// *************************************************
+
+	// *************************************************
+	// **** WIRING OF STAGE 5 : WRITE BACK   ***********
+	// *************************************************
+
+	// Modules
+	MUX_4_32 MUX19(MEMWB_Out_ALUout1, MEMWB_Out_MemOut1, MEMWB_Out_Im, MEMWB_Out_Pcp4, MEMWB_Out_WBsrc, MUX19_Out);
+	MUX_2_32 MUX18(MEMWB_Out_ALUout2, MEMWB_Out_MemOut2, MEMWB_Out_WBsrc[0], MUX18_Out);
+
+
+	// *************************************************
+	// *************************************************
+
+
+
+
+
+	
+	//Setting up initial value from PC_VALUE
+	initial 
+		program_counter.PCout = PC_VALUE;
+	
+
+
+
 
 endmodule 
 

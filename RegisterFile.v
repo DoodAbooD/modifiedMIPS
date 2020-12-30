@@ -3,7 +3,6 @@ module registerFile(
 readReg1, readReg2, readReg3, 
 writeReg, writeData, regWrite, 
 dataOut1, dataOut2, dataOut3,
-readReg1, readReg2, writeReg, 
 
 readReg1f, readReg2f, 
 writeRegf, writeData1f, writeData2f, 

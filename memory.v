@@ -15,6 +15,14 @@ module DataMemory (address, in1, in2, byte, write, dWrite, out1, out2);
 			mem[i] <= i+1;
 		end		
 	end
+	// mem[3] 	= 4
+	// mem[7] 	= 8
+	// mem[11] 	= 12
+	// mem[15] 	= 16
+	// mem[19] 	= 20
+	// mem[23] 	= 24
+	// mem[27] 	= 28
+	// mem[31] 	= 32	
 	
 	always @(*) begin
 		if (write) begin // Writing
@@ -58,13 +66,6 @@ module DataMemory (address, in1, in2, byte, write, dWrite, out1, out2);
 		end
 	end
 
-	// mem[3] 	= 4
-	// mem[7] 	= 8
-	// mem[11] 	= 12
-	// mem[15] 	= 16
-	// mem[19] 	= 20
-	// mem[23] 	= 24
-	// mem[27] 	= 28
-	// mem[31] 	= 32	
+
 endmodule
 

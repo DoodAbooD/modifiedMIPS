@@ -1,25 +1,20 @@
-module MEMWB ( clk,
+module MEMWB (clk,
 iWrite, iFloat,
 iWBsrc, iDW,
-iALUout1, iMemOut1, iMemOut2,
+iALUout1, iMemOut1, iMemOut2, 
 iPcp4, iIm, iDstReg, iALUout2, 
-
 oWrite, oFloat,
 oWBsrc, oDW,
-oALUout1, oMemOut1, oMemOut2,
-oPcp4, oIm, oDstReg, oALUout2 
-);
-
+oALUout1, oMemOut1, oMemOut2,oPcp4, oIm, oDstReg, oALUout2);
 
     input clk;
-
     input iWrite, iFloat;
     input [1:0] iWBsrc;
     input iDW;
     input [31:0] iALUout1, iMemOut1, iMemOut2;
     input [31:0] iPcp4, iIm;
     input [4:0] iDstReg;
-    input [31:0] iALUOut2;
+    input [31:0] iALUout2;
 
     output oWrite, oFloat;
     output [1:0] oWBsrc;
@@ -27,7 +22,7 @@ oPcp4, oIm, oDstReg, oALUout2
     output [31:0] oALUout1, oMemOut1, oMemOut2;
     output [31:0] oPcp4, oIm;
     output [4:0] oDstReg;
-    output [31:0] oALUOut2;
+    output [31:0] oALUout2;
 
     reg internal_Write, internal_Float;
     reg [1:0] internal_WBsrc;
@@ -35,7 +30,7 @@ oPcp4, oIm, oDstReg, oALUout2
     reg [31:0] internal_ALUout1, internal_MemOut1, internal_MemOut2;
     reg [31:0] internal_Pcp4, internal_Im;
     reg [4:0] internal_DstReg;
-    reg [31:0] internal_ALUOut2;
+    reg [31:0] internal_ALUout2;
 
     assign oWrite = internal_Write; 
     assign oFloat = internal_Float;
@@ -77,5 +72,5 @@ oPcp4, oIm, oDstReg, oALUout2
         internal_DstReg <= iDstReg;
         internal_ALUout2 <= iALUout2;
     end
-
-endmodule
+	 
+endmodule 

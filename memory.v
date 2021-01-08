@@ -2,7 +2,7 @@ module DataMemory (address, in1, in2, byte, write, dWrite, out1, out2);
 
 	input [31:0] address, in1, in2;
 	input byte, write, dWrite;
-	output [31:0] out1, out2;
+	output reg [31:0] out1, out2;
 
 	// Intitialization for the memory 
 	reg [7:0] mem [1023:0]; // building a 1k memory //

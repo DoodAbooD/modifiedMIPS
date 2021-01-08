@@ -30,7 +30,7 @@ oFmt, oFt, oDstReg, oIm, oRd
     output oFlush, oRWrite, oByte, oFloat, oDW;
     output [2:0] oWBsrc;
     output oMWrite;
-    output [31:0] oPcP4;
+    output [31:0] oPcp4;
     output [2:0] oExOp;
     output [31:0] oRegOut1, oRegOut2, oRegOut3, oFloat1P1, oFloat2P1;
     output [5:0] oFun;
@@ -56,7 +56,7 @@ oFmt, oFt, oDstReg, oIm, oRd
     assign oWBsrc = internal_WBsrc;
     assign oMWrite = internal_MWrite;
     assign oDW = internal_DW;
-    assign oPcP4 = internal_Pcp4;
+    assign oPcp4 = internal_Pcp4;
     assign oExOp = internal_ExOp;
     assign oRegOut1 = internal_RegOut1;
     assign oRegOut2 = internal_RegOut2;

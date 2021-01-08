@@ -27,10 +27,7 @@ module fALU(in1, in2, control, con, out);
     wire i1d_sign = in1[63]; // Sign of first input for double
     wire i2d_sign = in2[63]; // Sign of second input for double
 
-    initial begin
-        con = 0; 
-        out = 0;
-    end
+    
 
     //helpers
     reg carry;
@@ -47,8 +44,12 @@ module fALU(in1, in2, control, con, out);
     reg [10:0] Dsmall_exp_temp;
     reg [51:0] Dresult_mant_temp;
     reg [10:0] Dresult_exp_temp;
+	 
 
-
+	initial begin
+        con = 0; 
+        out = 0;
+    end
 
 
     always @(*) begin
@@ -57,7 +58,7 @@ module fALU(in1, in2, control, con, out);
         small_mant_temp = 0;
         large_exp_temp = 0;
         small_exp_temp = 0;
-        result_mant_temp = 0;
+        //result_mant_temp = 0;
         result_exp_temp = 0;
         Dlarge_mant_temp = 0;
         Dsmall_mant_temp = 0;
@@ -157,7 +158,8 @@ module fALU(in1, in2, control, con, out);
 
                         // Exponent starts at the same value of the input exponent, and decreases depending on the number of leading zeros in mantissa
                         result_exp_temp = i1s_exp;
-                        while (result_mant_temp[22] == 0) begin
+                         
+								while (result_mant_temp[22] == 0 && result_mant_temp != 0) begin
                             result_mant_temp = result_mant_temp << 1; // normalizing mantissa
                             result_exp_temp = result_exp_temp - 1; 
                         end
@@ -203,7 +205,7 @@ module fALU(in1, in2, control, con, out);
 
                     // exponent starts as the larger, and decreases if leading one was borrowed from (keeps decreasing until we reach a leading 1)
                     result_exp_temp = large_exp_temp;
-                    while (~carry) begin
+                    while (~carry && result_mant_temp != 0) begin
                         {carry, result_mant_temp} = {carry, result_mant_temp} << 1;
                         result_exp_temp = result_exp_temp - 1;
                     end
@@ -360,7 +362,7 @@ module fALU(in1, in2, control, con, out);
 
                         // Exponent starts at the same value of the input exponent, and decreases depending on the number of leading zeros in mantissa
                         Dresult_exp_temp = i1d_exp;
-                        while (Dresult_mant_temp[51] == 0) begin
+                        while (Dresult_mant_temp[51] == 0 && Dresult_mant_temp != 0) begin
                             Dresult_mant_temp = Dresult_mant_temp << 1; // normalizing mantissa
                             Dresult_exp_temp = Dresult_exp_temp - 1; 
                         end
@@ -406,7 +408,7 @@ module fALU(in1, in2, control, con, out);
 
                     // exponent starts as the larger, and decreases if leading one was borrowed from (keeps decreasing until we reach a leading 1)
                     Dresult_exp_temp = Dlarge_exp_temp;
-                    while (~carry) begin
+                    while (~carry && Dresult_mant_temp != 0) begin
                         {carry, Dresult_mant_temp} = {carry, Dresult_mant_temp} << 1;
                         Dresult_exp_temp = Dresult_exp_temp - 1;
                     end

@@ -7,10 +7,15 @@ stage5 : writeback stage (WB)
 */
 
 module Top(PC_VALUE);// testbench holds the PC Value.
-	input PC_VALUE;
+	input [31:0] PC_VALUE;
 	wire clk;
 	clock Clock(clk);
-
+	
+	reg [31:0] program_counter;
+	
+	initial 
+		#1 program_counter = PC_VALUE;
+		
 
 
 	// *************************************************
@@ -18,6 +23,7 @@ module Top(PC_VALUE);// testbench holds the PC Value.
 	// *************************************************
 	
 	//Wires
+	wire [31:0] PC_Out = program_counter;
 	wire [31:0] Branch_Address;
 	wire Branch_Decision;
 	wire [31:0] MUX1_Out;
@@ -25,7 +31,6 @@ module Top(PC_VALUE);// testbench holds the PC Value.
 	wire C_Out_Jump;
 	wire [31:0] PCP4;
 	wire [31:0] MUX2_Out;
-	wire [31:0] PC_Out;
 	wire [31:0] Instruction_Out;
 	wire stall_enable;
 
@@ -33,9 +38,9 @@ module Top(PC_VALUE);// testbench holds the PC Value.
 	assign PCP4 = PC_Out + 4;
 
 	//Modules
-	MUX2_32 MUX1(PCP4, Branch_Address, Branch_Decision, MUX1_Out);
-	MUX2_32 MUX2(MUX1_Out, Jump_Address, C_Out_Jump, MUX2_Out);
-	PC program_counter(MUX2_Out, PC_Out, clk, stall_enable);
+	MUX_2_32 MUX1(PCP4, Branch_Address, Branch_Decision, MUX1_Out);
+	MUX_2_32 MUX2(MUX1_Out, Jump_Address, C_Out_Jump, MUX2_Out);
+	//PC program_counter(MUX2_Out, PC_Out, clk, stall_enable);
 	instructionMemory IM(Instruction_Out, PC_Out);
 
 	// *************************************************
@@ -174,7 +179,7 @@ module Top(PC_VALUE);// testbench holds the PC Value.
 	MUX8_Out, C_Out_Byte, C_Out_Float,
 	C_Out_WBSrc, MUX7_Out, C_Out_DW,
 	IFID_Out_Pcp4, C_Out_ExOp, 
-	MUX5_Out, IFID_Out_fun, MUX5_Out, RFile_Out_Out3,
+	MUX5_Out, IFID_Out_fun, MUX4_Out, RFile_Out_Out3,
 	RFile_Out_FOut1p1, RFile_Out_FOut2p1,
 	IFID_Out_RsFmt, IFID_Out_RtFt, MUX6_Out, IFID_Out_Im, IFID_Out_RdFs,
 	IDEX_Out_Flush, 
@@ -218,8 +223,8 @@ module Top(PC_VALUE);// testbench holds the PC Value.
 	wire fALU_con; // Condition from Floating ALU
 	wire [63:0] fALU_out; // Output of FLoating ALU
 	wire MUX12_Out; // Branch Condition
-	wire MUX13_Out;  
-	wire MUX16_Out;
+	wire [31:0] MUX13_Out;  
+	wire [31:0] MUX16_Out;
 	wire [1:0] Rs_Fwd_Control; // Controls forwarding of Register Rs value
 	wire [1:0] Rt_Fwd_Control; // Controls forwarding of Register Rt value
 	wire [1:0] Rd_Fwd_Control; // Controls forwarding of Register Rd value
@@ -236,10 +241,12 @@ module Top(PC_VALUE);// testbench holds the PC Value.
 	wire [1:0] EXMEM_Out_WBsrc; // Write back data source select
 	wire [4:0] EXMEM_Out_DstReg; // Destination Register from Exec Stage
 
+	wire [31:0] ALUOut_EXEC = EXMEM_Out_ALUout1;
+	
 	//Modules
-	MUX_4_32 MUX20(IDEX_Out_RegOut1, EXMEM_Out_ALUout1, MUX19_Out, 0, Rd_Fwd_Control, MUX20_Out);
+	MUX_4_32 MUX20(IDEX_Out_RegOut1, EXMEM_Out_ALUout1, MUX19_Out, 0, Rs_Fwd_Control, MUX20_Out);
 	MUX_4_32 MUX21(IDEX_Out_RegOut2, EXMEM_Out_ALUout1,MUX19_Out, 0, Rt_Fwd_Control, MUX21_Out);
-	MUX_4_32 MUX22(IDEX_Out_RegOut3, EXMEM_Out_ALUout1, MUX19_Out,0, Rs_Fwd_Control, MUX22_Out);
+	MUX_4_32 MUX22(IDEX_Out_RegOut3, EXMEM_Out_ALUout1, MUX19_Out,0, Rd_Fwd_Control, MUX22_Out); 
 	MUX_2_32 MUX9({{16{IDEX_Out_Im[15]}} ,IDEX_Out_Im}, {16'b0 ,IDEX_Out_Im}, ALUCU_Out_zEx, MUX9_Out);
 	/*
 	module ALUControlUnit(op, fun, fmt, ft,
@@ -391,11 +398,12 @@ module Top(PC_VALUE);// testbench holds the PC Value.
 
 
 	
-	//Setting up initial value from PC_VALUE
-	initial 
-		program_counter.PCout = PC_VALUE;
-	
 
+
+	always @(posedge clk) begin
+		if (~stall_enable)
+			program_counter = MUX2_Out;
+	end
 
 
 

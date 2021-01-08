@@ -1,4 +1,4 @@
-module mux_2_1(in0, in1, sel, out);
+module MUX_2_1(in0, in1, sel, out);
     input in0,in1;
     input sel;
     output out;  

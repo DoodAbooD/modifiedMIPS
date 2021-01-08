@@ -1,4 +1,4 @@
-module arethmatic1; 
+module tst_3; 
 	reg [31:0]PC_VALUE_;		  
 	reg [31:0] cycle;
 	Top top(PC_VALUE_);

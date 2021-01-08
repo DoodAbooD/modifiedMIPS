@@ -16,15 +16,15 @@ clk);
 	input regWrite; //control signals
 	output [31:0] dataOut1, dataOut2, dataOut3;
 	reg [31:0] dataOut1, dataOut2, dataOut3;		
-	reg [31:0] registers_i[31:0];
+	reg signed [31:0] registers_i[31:0];
 
 	// Floats
 	input [4:0] readReg1f, readReg2f, writeRegf;
     input [31:0] writeData1f, writeData2f;
     input regWritef, regDWritef; //control signals
-    output [31:0] dataOut1f, dataOut2f;
-    reg [31:0] dataOut1f, dataOut2f;         
-    reg [31:0] registers_f[31:0];	
+    output [31:0] dataOut1f, dataOut2f, dataOut1p1f, dataOut2p1f;
+    reg [31:0] dataOut1f, dataOut2f, dataOut1p1f, dataOut2p1f;        
+    reg signed [31:0] registers_f[31:0];	
 
     input clk;
 
@@ -55,7 +55,7 @@ clk);
             end
             //Only regWrite is ON, and write register is not register zero, 
             else if (regWritef && writeRegf != 5'b00000)  
-                registers_f[writeReg] = writeData1;
+                registers_f[writeReg] = writeData1f;
 			
 		end
 

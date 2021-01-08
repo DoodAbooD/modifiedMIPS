@@ -19,80 +19,52 @@ FW_Rd, FW_Rt, FW_Rs, stall);
     end
 
     always @(*) begin
-
+        FW_Rd = 0;
+        FW_Rt = 0;
+        FW_Rs = 0; 
+        stall = 0;
         // Load and use Hazard (Stall Condition)
         //Rs
         if ((EX_Dst == ID_Rs) && (ID_Rs != 0) && (EX_Write) && (~ EX_Float) && (WBSrc == 1)) begin
-            FW_Rd = 0;
-            FW_Rt = 0;
-            FW_Rs = 0; 
             stall = 1;
         end
         //Rst
         else if ((EX_Dst == ID_Rt) && (ID_Rt != 0) && (EX_Write) && (~ EX_Float) && (WBSrc == 1)) begin
-            FW_Rd = 0;
-            FW_Rt = 0;
-            FW_Rs = 0; 
             stall = 1;
         end
         //Rd
         else if ((EX_Dst == ID_Rd) && (ID_Rd != 0) && (EX_Write) && (~ EX_Float) && (WBSrc == 1)) begin
-            FW_Rd = 0;
-            FW_Rt = 0;
-            FW_Rs = 0; 
             stall = 1;
         end
         
-        // MEM-ALU Forwarding 
+
+        // MEM-ALU Forwarding , no need to add the condition for not ALU-ALU forwarding, since it is checked afterwards and will overwrite value if satisfied
         // Rs 
-        else if ((MEM_Dst == ID_Rs) && (ID_Rs != 0) && (MEM_Write) && (~ MEM_Float)) begin
-            FW_Rd = 0;
-            FW_Rt = 0;
+        if ((MEM_Dst == ID_Rs) && (ID_Rs != 0) && (MEM_Write) && (~ MEM_Float)) begin
             FW_Rs = 2; 
-            stall = 0; 
         end
         // Rt    
-        else if  ((MEM_Dst == ID_Rt) && (ID_Rt != 0) && (MEM_Write) && (~ MEM_Float)) begin
-            FW_Rd = 0;
+        if  ((MEM_Dst == ID_Rt) && (ID_Rt != 0) && (MEM_Write) && (~ MEM_Float))  begin
             FW_Rt = 2;
-            FW_Rs = 0; 
-            stall = 0; 
         end
         // Rd    
-        else if  ((MEM_Dst == ID_Rd) && (ID_Rd != 0) && (MEM_Write) && (~ MEM_Float)) begin
+        if  ((MEM_Dst == ID_Rd) && (ID_Rd != 0) && (MEM_Write) && (~ MEM_Float))  begin
             FW_Rd = 2;
-            FW_Rt = 0;
-            FW_Rs = 0; 
-            stall = 0;      
         end
+
 
         // ALU-ALU Forwarding
         // Rs
-        else if ((EX_Dst == ID_Rs) && (ID_Rs != 0) && (EX_Write) && (~ EX_Float)) begin
-            FW_Rd = 0;
-            FW_Rt = 0;
+        if ((EX_Dst == ID_Rs) && (ID_Rs != 0) && (EX_Write) && (~ EX_Float)) begin
             FW_Rs = 1; 
-            stall = 0;
         end
         // Rt
-        else if ((EX_Dst == ID_Rt) && (ID_Rt != 0) && (EX_Write) && (~ EX_Float)) begin
-            FW_Rd = 0;
+        if ((EX_Dst == ID_Rt) && (ID_Rt != 0) && (EX_Write) && (~ EX_Float)) begin
             FW_Rt = 1;
-            FW_Rs = 0; 
-            stall = 0;
         end
         // Rd
-        else if ((EX_Dst == ID_Rd) && (ID_Rd != 0) && (EX_Write) && (~ EX_Float)) begin
+        if ((EX_Dst == ID_Rd) && (ID_Rd != 0) && (EX_Write) && (~ EX_Float)) begin
             FW_Rd = 1;
-            FW_Rt = 0;
-            FW_Rs = 0; 
-            stall = 0;
-        end
-        else begin
-            FW_Rd = 0;
-            FW_Rt = 0;
-            FW_Rs = 0; 
-            stall = 0;
         end
     end
 

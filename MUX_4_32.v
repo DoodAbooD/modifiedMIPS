@@ -1,4 +1,4 @@
-module mux_4_32(in0, in1, in2, in3, sel, out);
+module MUX_4_32(in0, in1, in2, in3, sel, out);
     input [31:0] in0,in1,in2,in3;
     input [1:0] sel;
     output reg [31:0] out;  

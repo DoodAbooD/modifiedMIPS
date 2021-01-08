@@ -4,9 +4,9 @@ JR, Byte, Jump, MemWrite, RegWrite, Float, Shift, RegDst, DW, WBSrc, ExOp
 
 input [5:0] opCode, fun;
 input [4:0] fmt;
-output JR, Byte, Jump, MemWrite, RegWrite, Float, Shift, DW;
-output [1:0] RegDst;
-output [2:0] ExOp, WBSrc;
+output reg JR, Byte, Jump, MemWrite, RegWrite, Float, Shift, DW;
+output reg [1:0] RegDst;
+output reg [2:0] ExOp, WBSrc;
 
 
 

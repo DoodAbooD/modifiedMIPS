@@ -22,7 +22,7 @@ module tst_1;
 		$display("$t6: %d" , top.regFile.registers_i[14], " The correct value is 28");
 		$display("$t7: %d" , top.regFile.registers_i[15], " The correct value is 32");
 				
-		$finish;
+		$stop;
 		end
 		
 		

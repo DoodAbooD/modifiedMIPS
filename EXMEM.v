@@ -6,7 +6,7 @@ iRegOut1, iRegOut2, iDstReg, iIm,
 oFlush, oByte, oWrite, oFloat,
 oWBsrc, oMWrite, oDW,
 oALUout1, oALUout2, oPcp4,
-oRegOu1, oRegOut2, oDstReg, oIm
+oRegOut1, oRegOut2, oDstReg, oIm
 );
 
 
@@ -28,10 +28,10 @@ oRegOu1, oRegOut2, oDstReg, oIm
 
     reg internal_Flush, internal_Byte, internal_Write, internal_Float;
     reg [1:0] internal_WBsrc; 
-    reg internal_MWrite, DW;
-    reg [31:0] internal_ALUout1, internal_ALUout2, Pcp4;
-    reg [31:0] internal_RegOut1, RegOut2, Im;
-    reg [4:0] DstReg;
+    reg internal_MWrite, internal_DW;
+    reg [31:0] internal_ALUout1, internal_ALUout2, internal_Pcp4;
+    reg [31:0] internal_RegOut1, internal_RegOut2, internal_Im;
+    reg [4:0] internal_DstReg;
 
     assign oFlush = internal_Flush;
     assign oByte = internal_Byte; 

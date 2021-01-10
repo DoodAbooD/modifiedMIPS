@@ -5,8 +5,8 @@ JR, Byte, Jump, MemWrite, RegWrite, Float, Shift, RegDst, DW, WBSrc, ExOp
 input [5:0] opCode, fun;
 input [4:0] fmt;
 output reg JR, Byte, Jump, MemWrite, RegWrite, Float, Shift, DW;
-output reg [1:0] RegDst;
-output reg [2:0] ExOp, WBSrc;
+output reg [1:0] RegDst, WBSrc;
+output reg [2:0] ExOp; 
 
 
 
@@ -43,7 +43,7 @@ always @(*) begin
             MemWrite <= 1;   // Writing to Memory     
 
         //Type 6
-        else if (fun == 6'b011000) begin  // Jump Register
+        else if (fun == 6'b001000) begin  // Jump Register
             JR <= 1; // Jump Register
             Jump <= 1; // Jump Instruction
 

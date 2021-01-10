@@ -9,7 +9,7 @@ module tst_8;
 	always @(posedge top.clk) begin	
 if (cycle== 8)	
 begin
-		$display("wcycle: %d" , cycle);
+		$display("cycle: %d" , cycle);
 		$display("PC: %d",top.program_counter);				   
 		$display("ALUOut_EXEC: %d" , top.ALUOut_EXEC);
 		$display("$s1: %d" , top.regFile.registers_i[19], " The correct value is 10");

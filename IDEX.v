@@ -18,7 +18,7 @@ oFmt, oFt, oDstReg, oIm, oRd
     input clk, stall;
 
     input iFlush, iRWrite, iByte, iFloat, iDW;
-    input [2:0] iWBsrc;
+    input [1:0] iWBsrc;
     input iMWrite;
     input [31:0] iPcp4;
     input [2:0] iExOp;
@@ -28,7 +28,7 @@ oFmt, oFt, oDstReg, oIm, oRd
     input [15:0] iIm;
 
     output oFlush, oRWrite, oByte, oFloat, oDW;
-    output [2:0] oWBsrc;
+    output [1:0] oWBsrc;
     output oMWrite;
     output [31:0] oPcp4;
     output [2:0] oExOp;
@@ -37,12 +37,13 @@ oFmt, oFt, oDstReg, oIm, oRd
     output [4:0] oFmt, oFt, oDstReg, oRd;
     output [15:0] oIm;
 
+    //Could have made the outputs registers themeselves, this should be changed later
 
     reg internal_Flush, internal_RWrite, internal_Byte, internal_Float, internal_DW;
-    reg [2:0] internal_WBsrc;
+    reg [1:0] internal_WBsrc;
     reg internal_MWrite;
     reg [31:0] internal_Pcp4;
-    reg [1:0] internal_ExOp;
+    reg [2:0] internal_ExOp;
     reg [31:0] internal_RegOut1, internal_RegOut2, internal_RegOut3;
     reg [31:0] internal_Float1P1, internal_Float2P1;
     reg [5:0] internal_Fun;

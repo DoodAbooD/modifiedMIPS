@@ -10,10 +10,21 @@ module DataMemory (address, in1, in2, byte, write, dWrite, out1, out2);
 	
 	initial begin
 		for(i = 0; i <1024; i = i + 1) begin
-			mem[i] <=  0;
+			mem[i] =  0;
 			if((i+1)%4 == 0)
-			mem[i] <= i+1;
-		end		
+			mem[i] = i+1;
+		end	
+		
+		mem[35] = 8'hD2;
+		mem[36] = 8'h13;
+		mem[37] = 8'hD7;
+		mem[38] = 8'hE9;
+
+		mem[39] = 8'hD0;
+		mem[40] = 8'h76;
+		mem[41] = 8'h12;
+		mem[42] = 8'h29;
+	
 	end
 	// mem[3] 	= 4
 	// mem[7] 	= 8
@@ -22,7 +33,11 @@ module DataMemory (address, in1, in2, byte, write, dWrite, out1, out2);
 	// mem[19] 	= 20
 	// mem[23] 	= 24
 	// mem[27] 	= 28
-	// mem[31] 	= 32	
+	// mem[31] 	= 32
+	
+	
+
+
 	
 	always @(*) begin
 		if (write) begin // Writing

@@ -82,7 +82,7 @@ module Top(PC_VALUE);// testbench holds the PC Value.
 	wire C_Out_Shift; // Shift Instruction
 	wire [1:0] C_Out_RegDst; // Choose Destination Register
 	wire C_Out_DW; // Double Write
-	wire [2:0] C_Out_WBSrc; // Write Back Data Source
+	wire [1:0] C_Out_WBSrc; // Write Back Data Source
 	wire [2:0] C_Out_ExOp; // ALU Operation
 	//Register File Output Wires
 	wire [31:0] RFile_Out_Out1;
@@ -110,7 +110,7 @@ module Top(PC_VALUE);// testbench holds the PC Value.
 	
 
 	// Modules
-	MUX_2_1 MUX3 ({IFID_Out_Pcp4[31:28], IFID_Out_ad , 2'b0} , RFile_Out_Out2, C_Out_JR , Jump_Address);
+	MUX_2_32 MUX3 ({IFID_Out_Pcp4[31:28], IFID_Out_ad , 2'b0} , RFile_Out_Out2, C_Out_JR , Jump_Address);
 	ControlUnit Control_Unit(IFID_Out_Op, IFID_Out_fun, IFID_Out_RsFmt,
 	C_Out_JR, C_Out_Byte, C_Out_Jump, C_Out_MemWrite, C_Out_RegWrite, C_Out_Float, 
 	C_Out_Shift, C_Out_RegDst, C_Out_DW, C_Out_WBSrc, C_Out_ExOp);
@@ -266,13 +266,13 @@ module Top(PC_VALUE);// testbench holds the PC Value.
 	//module ALU(in1,in2,out1,out2,o,z,control);
 	ALU myALU (MUX20_Out, MUX10_Out, ALU_Out_Out1, ALU_Out_Out2, overflow, ALU_Out_Z, ALUCU_Out_Con);
 	// module fALU(in1, in2, control, con, out);
-	fALU myfALU( {MUX20_Out, IDEX_Out_Float1P1} , {MUX21_Out, IDEX_Out_Float2P1}, ALUCU_Out_Con, fALU_out);
+	fALU myfALU( {MUX20_Out, IDEX_Out_Float1P1} , {MUX21_Out, IDEX_Out_Float2P1}, ALUCU_Out_Con, fALU_con, fALU_out);
 	MUX_2_1 MUX12(ALU_Out_Z, FPC_Out, ALUCU_Out_brS, MUX12_Out);
 	MUX_2_32 MUX13(ALU_Out_Out1, MUX11_Out, ALUCU_Out_HiloR, MUX13_Out);
-	MUX_2_32 MUX16(MUX13_Out, fALU_out[63:32], IDEX_Out_Float, MUX16_Out);
+	MUX_2_32 MUX16(MUX13_Out, fALU_out[63:32], (IDEX_Out_Float & ~ALUCU_Out_aluSrc[0]), MUX16_Out);
 	assign Branch_Decision = (ALUCU_Out_eqNe ^ MUX12_Out) & ALUCU_Out_br;
-	MUX_2_1 MUX14(IDEX_Out_RWrite, 0, EXMEM_Out_Flush | stall_enable , MUX14_Out);
-	MUX_2_1 MUX15(IDEX_Out_MWrite, 0, EXMEM_Out_Flush | stall_enable, MUX15_Out);
+	MUX_2_1 MUX14(IDEX_Out_RWrite, 1'b0, EXMEM_Out_Flush | stall_enable , MUX14_Out);
+	MUX_2_1 MUX15(IDEX_Out_MWrite, 1'b0, EXMEM_Out_Flush | stall_enable, MUX15_Out);
 	/*
 	module forwardingUnit(ID_Rs, ID_Rt, ID_Rd, 
 	EX_Dst, MEM_Dst, EX_Write, MEM_Write, EX_Float, MEM_Float, WBSrc,

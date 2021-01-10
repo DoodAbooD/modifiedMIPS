@@ -1,0 +1,70 @@
+# Reading C:/altera_lite/16.0/modelsim_ase/tcl/vsim/pref.tcl
+# Loading project modifiedMIPS_SIM
+# Compile of Top.v was successful.
+# Compile of ALU.v was successful.
+# Compile of ALUControlUnit.v was successful.
+# Compile of Clock.v was successful.
+# Compile of ControlUnit.v was successful.
+# Compile of EXMEM.v was successful.
+# Compile of fALU.v was successful.
+# Compile of forwardingUnit.v was successful.
+# Compile of IDEX.v was successful.
+# Compile of IFID.v was successful.
+# Compile of insMem.v was successful.
+# Compile of mathTester.v was successful.
+# Compile of memory.v was successful.
+# Compile of MEMWB.v was successful.
+# Compile of MUX_2_1.v was successful.
+# Compile of MUX_2_32.v was successful.
+# Compile of MUX_4_5.v was successful.
+# Compile of MUX_4_32.v was successful.
+# Compile of PC.v was successful.
+# Compile of reg1.v was successful.
+# Compile of reg32.v was successful.
+# Compile of RegisterFile.v was successful.
+# Compile of test.v was successful.
+# Compile of tst_6.v was successful.
+# Compile of tst_1.v was successful.
+# Compile of tst_2.v was successful.
+# Compile of tst_3 .v was successful.
+# Compile of tst_4.v was successful.
+# Compile of tst_5.v was successful.
+# Compile of tst_7.v was successful.
+# Compile of tst_8.v was successful.
+# Compile of tst_9.v was successful.
+# Compile of tst_10.v was successful.
+# Compile of tst_11.v was successful.
+# Compile of tst_12.v was successful.
+# 35 compiles, 0 failed with no errors.
+vsim -gui work.tst_12
+# vsim -gui work.tst_12 
+# Start time: 05:02:18 on Jan 10,2021
+# Loading work.tst_12
+# Loading work.Top
+# Loading work.clock
+# Loading work.MUX_2_32
+# Loading work.instructionMemory
+# Loading work.IFID
+# Loading work.ControlUnit
+# Loading work.registerFile
+# Loading work.MUX_4_32
+# Loading work.MUX_4_5
+# Loading work.MUX_2_1
+# Loading work.IDEX
+# Loading work.ALUControlUnit
+# Loading work.reg32
+# Loading work.reg1
+# Loading work.ALU
+# Loading work.fALU
+# Loading work.forwardingUnit
+# Loading work.EXMEM
+# Loading work.DataMemory
+# Loading work.MEMWB
+run -all
+# cycle:         25
+# PC:       1300
+# ALUOut_EXEC:          0
+# $t2: d223390b The correct value is D223390C
+# ** Note: $stop    : C:/Users/Okasha/Documents/modifiedMIPS/modifiedMIPS/testbenches/tst_12.v(17)
+#    Time: 2450 ps  Iteration: 1  Instance: /tst_12
+# Break in Module tst_12 at C:/Users/Okasha/Documents/modifiedMIPS/modifiedMIPS/testbenches/tst_12.v line 17

@@ -1,0 +1,38 @@
+# Reading C:/altera_lite/16.0/modelsim_ase/tcl/vsim/pref.tcl
+# Loading project modifiedMIPS_SIM
+vsim -gui work.tst_5
+# vsim -gui work.tst_5 
+# Start time: 22:08:55 on Jan 09,2021
+# Loading work.tst_5
+# Loading work.Top
+# Loading work.clock
+# Loading work.MUX_2_32
+# Loading work.instructionMemory
+# Loading work.IFID
+# Loading work.ControlUnit
+# Loading work.registerFile
+# Loading work.MUX_4_32
+# Loading work.MUX_4_5
+# Loading work.MUX_2_1
+# Loading work.IDEX
+# Loading work.ALUControlUnit
+# Loading work.reg32
+# Loading work.reg1
+# Loading work.ALU
+# Loading work.fALU
+# Loading work.forwardingUnit
+# Loading work.EXMEM
+# Loading work.DataMemory
+# Loading work.MEMWB
+run -all
+# cycle:         16
+# PC:        564
+# ALUOut_EXEC:          0
+# $s1:          30 The correct value is 30
+# $s2:          20 The correct value is 20
+# $s3:           6 The correct value is 6
+# ** Note: $finish    : C:/Users/Okasha/Documents/modifiedMIPS/modifiedMIPS/testbenches/tst_5.v(19)
+#    Time: 1550 ps  Iteration: 1  Instance: /tst_5
+# 1
+# Break in Module tst_5 at C:/Users/Okasha/Documents/modifiedMIPS/modifiedMIPS/testbenches/tst_5.v line 19
+# Break key hit

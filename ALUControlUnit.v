@@ -101,7 +101,7 @@ con, hiloS, FPCw, zEx);
                 hiloW = 1; // Write to HI/LO Registers
             end
             6'b011000: begin // R Multiply -> Signed Mult. and Write to HI/LO
-                con = 4'b1111;
+                con = 4'b1110;
                 hiloW = 1; // Write to HI/LO Registers
             end 
             6'b011001: begin // R Unsigned Multiply -> Unsigned Mult. and Write to HI/LO
@@ -110,11 +110,11 @@ con, hiloS, FPCw, zEx);
             end
             6'b010000: begin // R Move from HI -> Read from HI/LO and Select HI
                 hiloR = 1; // Pass value from HILO instead of ALU
-                hiloS = 0; // Select HI register
+                hiloS = 1; // Select HI register
             end
             6'b010010: begin // R Move from LO -> Read from HI/LO and Select LO
                 hiloR = 1; // Pass value from HILO instead of ALU
-                hiloS = 1; // Select LO register
+                hiloS = 0; // Select LO register
             end
             
             endcase

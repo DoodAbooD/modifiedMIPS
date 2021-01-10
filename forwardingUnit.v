@@ -25,15 +25,15 @@ FW_Rd, FW_Rt, FW_Rs, stall);
         stall = 0;
         // Load and use Hazard (Stall Condition)
         //Rs
-        if ((EX_Dst == ID_Rs) && (ID_Rs != 0) && (EX_Write) && (~ EX_Float) && (WBSrc == 1)) begin
+        if ((EX_Dst == ID_Rs) && (ID_Rs != 0) && (EX_Write) && (~ EX_Float) && ((WBSrc == 1) || (WBSrc == 2))) begin
             stall = 1;
         end
         //Rst
-        else if ((EX_Dst == ID_Rt) && (ID_Rt != 0) && (EX_Write) && (~ EX_Float) && (WBSrc == 1)) begin
+        else if ((EX_Dst == ID_Rt) && (ID_Rt != 0) && (EX_Write) && (~ EX_Float) && ((WBSrc == 1) || (WBSrc == 2))) begin
             stall = 1;
         end
         //Rd
-        else if ((EX_Dst == ID_Rd) && (ID_Rd != 0) && (EX_Write) && (~ EX_Float) && (WBSrc == 1)) begin
+        else if ((EX_Dst == ID_Rd) && (ID_Rd != 0) && (EX_Write) && (~ EX_Float) && ((WBSrc == 1) || (WBSrc == 2))) begin
             stall = 1;
         end
         
